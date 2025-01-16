@@ -2,7 +2,7 @@ import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
 import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
 
-
+import { Link } from 'react-router-dom';
 import * as React from "react"
 import {
   AudioWaveform,
@@ -85,7 +85,7 @@ const data = {
       items: [
         {
           title: "Añadir incapacidad",
-          url: "addIncapacity",
+          url: "/addIncapacity",
         },
         {
           title: "Explorer",
@@ -164,14 +164,14 @@ const data = {
 }
 
 
-export function AppSidebar({ ...props }) {
+export function AppSidebar({setIsAuthenticated,  ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/home">
+              <Link to="/home">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <img src="./mfflogo.png" alt="" srcset="" />
                 </div>
@@ -179,7 +179,7 @@ export function AppSidebar({ ...props }) {
                   <span className="font-semibold">Money Free Flex Gestión</span>
                   <span className="">v1.0.0</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -188,7 +188,7 @@ export function AppSidebar({ ...props }) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={data.user} setIsAuthenticated={setIsAuthenticated} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

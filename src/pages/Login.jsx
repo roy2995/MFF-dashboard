@@ -1,15 +1,25 @@
 import { useState } from 'react';
 import { User, LockKeyhole, LogIn } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Logo from '/icono.png';
 
-function LoginForm() {
+export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    const navigate = useNavigate();
+    
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Username:', username);
-        console.log('Password:', password);
+        
+        if (username === 'user' && password === '1234') { // Reemplazá con tu lógica real de autenticación
+            setIsAuthenticated(true);
+            console.log('Username:', username);
+            console.log('Password:', password);
+            
+            navigate('/home'); // Navegar al home después de iniciar sesión
+          } else {
+            alert('Credenciales incorrectas');
+          }
     };
 
     return (
@@ -69,4 +79,4 @@ function LoginForm() {
     );
 }
 
-export default LoginForm;
+

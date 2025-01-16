@@ -39,7 +39,7 @@ export const UserRegistrationForm = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md">
+    <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
       <header className="mb-6">
         <h1 className="text-xl font-bold">New User Registration</h1>
         <p className="text-gray-600">Enter the details of the new user below.</p>
