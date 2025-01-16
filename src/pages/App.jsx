@@ -18,7 +18,7 @@ import { Separator } from "@/components/ui/separator"
 import {Home} from "./Home"
 import {EmployeProfile} from './employeProfile';
 import {AddIncapacity} from "./forms/AddIncapacity";
-
+import {UserRegistrationForm} from "./forms/AddEmploye"
 
 
 function App() {
@@ -40,7 +40,8 @@ function App() {
              <Route path="/home" element={<Home/>} />
              <Route path="/employe" element={<EmployeProfile/>} />
              <Route path="/addIncapacity" element={< AddIncapacity/>} />
-        
+             <Route path="/addEmploye" element={< UserRegistrationForm/>} />
+             <Route path="/addIncapacity" element={< AddIncapacity/>} />
              
       </Routes>
       </SidebarInset>
