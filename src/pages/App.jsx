@@ -17,7 +17,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import {Home} from "./Home"
 import { LoginForm } from "./Login.jsx"
-import {EmployeProfile} from './employeProfile';
+import {EmployeProfile} from './EmployeProfile';
 import {AddIncapacity} from "./forms/AddIncapacity";
 import { useState } from 'react';
 
