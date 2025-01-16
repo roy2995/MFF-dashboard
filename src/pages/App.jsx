@@ -59,7 +59,7 @@ function App() {
           <Routes>
             {/* Rutas dentro del dashboard que requieren autenticación */}
             <Route path="/home"  element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-            <Route path="/employe" element={<EmployeProfile />} />
+            <Route path="/addEmploye" element={<EmployeProfile />} />
             <Route path="/addIncapacity" element={isAuthenticated  ? <AddIncapacity />:<Navigate to="/login" />} />
           
             
