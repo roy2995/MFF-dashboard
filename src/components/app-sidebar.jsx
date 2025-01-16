@@ -7,14 +7,14 @@ import * as React from "react"
 import {
   AudioWaveform,
   BookOpen,
-  Bot,
+  Ambulance,
   Command,
   Frame,
   GalleryVerticalEnd,
   Map,
   PieChart,
   Settings2,
-  SquareTerminal,
+  CircleUserRound,
 } from "lucide-react"
 
 import {
@@ -58,7 +58,7 @@ const data = {
     {
       title: "Empleados",
       url: "#",
-      icon: SquareTerminal,
+      icon: CircleUserRound,
       isActive: true,
       items: [
         {
@@ -81,7 +81,7 @@ const data = {
     {
       title: "Incapacidades",
       url: "#",
-      icon: Bot,
+      icon: Ambulance,
       items: [
         {
           title: "Añadir incapacidad",

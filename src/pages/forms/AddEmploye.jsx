@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Calendar } from '../../components/ui/calendar';
+import React, { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
-export function UserRegistrationForm() {
+export const UserRegistrationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [contractDate, setContractDate] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const { toast } = useToast();
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -21,37 +21,33 @@ export function UserRegistrationForm() {
     }
   };
 
-  const handleYearChange = (e) => {
-    setSelectedYear(parseInt(e.target.value, 10));
-  };
-
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     const formData = new FormData(e.target);
 
-    // Add selected dates to formData
-    formData.append('dateBorn', dateOfBirth);
-    formData.append('dateToContract', contractDate);
-
     const values = Object.fromEntries(formData.entries());
     console.log(values);
 
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsSubmitting(false);
+
+    toast({
+      title: "User Registered",
+      description: "The user has been successfully registered.",
+    });
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md">
       <header className="mb-6">
-        <h1 className="text-xl font-bold">Registro para nuevo usuario</h1>
-        <p className="text-gray-600">Ingrese los datos para agregar un nuevo usuario.</p>
+        <h1 className="text-xl font-bold">New User Registration</h1>
+        <p className="text-gray-600">Enter the details of the new user below.</p>
       </header>
       <form onSubmit={onSubmit} className="space-y-6">
         {/* Profile Picture */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Foto de Perfil</label>
+          <Label htmlFor="picture">Profile Picture</Label>
           <div className="flex flex-col items-center space-y-4">
             {previewImage && (
               <div className="relative w-32 h-32 rounded-full overflow-hidden">
@@ -63,6 +59,7 @@ export function UserRegistrationForm() {
               </div>
             )}
             <input
+              id="picture"
               type="file"
               name="picture"
               accept="image/*"
@@ -75,43 +72,91 @@ export function UserRegistrationForm() {
         {/* User Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Fecha de nacimiento</label>
-            <div className="flex items-center gap-4">
-              <select
-                value={selectedYear}
-                onChange={handleYearChange}
-                className="border rounded-md p-2 text-sm"
-              >
-                {Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-              <Calendar
-                mode="single"
-                selected={dateOfBirth}
-                onSelect={setDateOfBirth}
-                defaultMonth={new Date(selectedYear, 0, 1)}
-                className="border rounded-md"
-              />
-            </div>
+            <Label htmlFor="username">Username</Label>
+            <input
+              id="username"
+              type="text"
+              name="username"
+              required
+              minLength="3"
+              className="block w-full p-2 border border-gray-300 rounded-md"
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Día de Contratación</label>
-            <Calendar
-              mode="single"
-              selected={contractDate}
-              onSelect={setContractDate}
-              className="border rounded-md"
+            <Label htmlFor="password">Password</Label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              required
+              minLength="8"
+              className="block w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
         </div>
 
-        {/* Address */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Dirección</label>
+          <Label htmlFor="fullName">Full Name</Label>
           <input
+            id="fullName"
+            type="text"
+            name="fullName"
+            required
+            className="block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        {/* Contact Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="dni">DNI</Label>
+            <input
+              id="dni"
+              type="text"
+              name="dni"
+              required
+              className="block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              required
+              className="block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="phone">Phone</Label>
+            <input
+              id="phone"
+              type="text"
+              name="phone"
+              required
+              className="block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div>
+            <Label htmlFor="dateBorn">Date of Birth</Label>
+            <input
+              id="dateBorn"
+              type="date"
+              name="dateBorn"
+              required
+              className="block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="direction">Address</Label>
+          <input
+            id="direction"
             type="text"
             name="direction"
             required
@@ -119,15 +164,75 @@ export function UserRegistrationForm() {
           />
         </div>
 
-        {/* Submit Button */}
+        {/* Blood Type */}
+        <div>
+          <Label htmlFor="bloodType">Blood Type</Label>
+          <select
+            id="bloodType"
+            name="bloodType"
+            required
+            className="block w-full p-2 border border-gray-300 rounded-md"
+          >
+            <option value="" disabled selected>
+              Select blood type
+            </option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+
+        {/* Emergency Contact */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="emergencyContactName">Emergency Contact Name</Label>
+            <input
+              id="emergencyContactName"
+              type="text"
+              name="emergencyContactName"
+              required
+              className="block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div>
+            <Label htmlFor="emergencyContactPhone">
+              Emergency Contact Phone
+            </Label>
+            <input
+              id="emergencyContactPhone"
+              type="text"
+              name="emergencyContactPhone"
+              required
+              className="block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+
+        {/* Contract Date */}
+        <div>
+          <Label htmlFor="dateToContract">Date to Contract</Label>
+          <input
+            id="dateToContract"
+            type="date"
+            name="dateToContract"
+            required
+            className="block w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+          className="w-full py-2 px-4 bg-primary text-white rounded-md hover:bg-gray-500 disabled:opacity-50"
         >
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>
   );
-}
+};
