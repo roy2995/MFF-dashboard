@@ -7,19 +7,46 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    
-    const handleSubmit = (event) => {
+    const apiUrl = 'http://192.168.68.109:8080/login'; 
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        
-        if (username === 'user' && password === '1234') { // Reemplazá con tu lógica real de autenticación
-            setIsAuthenticated(true);
-            console.log('Username:', username);
-            console.log('Password:', password);
-            
-            navigate('/home'); // Navegar al home después de iniciar sesión
-          } else {
-            alert('Credenciales incorrectas');
-          }
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    
+                },
+                body: JSON.stringify({ 
+                    username, 
+                    password 
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                console.log('Respuesta de la API:', data);
+
+                if (data.token) {
+                    setIsAuthenticated(true);
+                    localStorage.setItem('token', data.token); // Guardar el token en localStorage
+                    alert(data.message); // Mostrar mensaje de bienvenida
+                    navigate('/home'); // Navegar al home
+                } else {
+                    alert('Error: No se recibió un token válido.');
+                }
+            } else if (response.status === 401) {
+                alert('Credenciales incorrectas. Verifica tu usuario y contraseña.');
+            } else {
+                alert('Error al conectar con el servidor. Inténtalo de nuevo más tarde.');
+            }
+        } catch (error) {
+            console.error('Error al conectar con la API:', error);
+            alert('Hubo un problema al conectar con el servidor.');
+        }
     };
 
     return (
@@ -78,5 +105,3 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
         </div>
     );
 }
-
-
