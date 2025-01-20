@@ -6,15 +6,8 @@ import {
 } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+import Header from './Header';
+
 import {Home} from "./Home"
 import { LoginForm } from "./Login.jsx"
 import {EmployeProfile} from './EmployeProfile';
@@ -26,9 +19,7 @@ import { useState } from 'react';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación
-  const handleLogout = () => {
-    setIsAuthenticated(false); // Cuando el usuario cierra sesión
-  };
+  
   return (
     <Router>
     <Routes>
@@ -50,11 +41,8 @@ function App() {
       <SidebarProvider>
         <AppSidebar setIsAuthenticated={setIsAuthenticated}/>
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b shadow-lg bg">
-            <div className="flex items-center gap-2 px-3 bg">
-              <SidebarTrigger />
-              <Separator orientation="vertical" className="mr-2 h-4" />
-            </div>
+          <header className="flex h-16 border-b shadow-lg ">
+             <Header />
           </header>
           <Routes>
             {/* Rutas dentro del dashboard que requieren autenticación */}
