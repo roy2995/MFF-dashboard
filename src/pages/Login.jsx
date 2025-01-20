@@ -2,47 +2,20 @@ import { useState } from 'react';
 import { User, LockKeyhole, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '/icono.png';
+import {signIn} from '../lib/api_gateway';
 
 export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const apiUrl = 'http://192.168.68.109:8080/login'; 
-
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    
-                },
-                body: JSON.stringify({ 
-                    username, 
-                    password 
-                }),
-            });
 
-            if (response.ok) {
-                const data = await response.json();
+           await signIn('login', username, password, setIsAuthenticated, navigate);
 
-                console.log('Respuesta de la API:', data);
-
-                if (data.token) {
-                    setIsAuthenticated(true);
-                    localStorage.setItem('token', data.token); // Guardar el token en localStorage
-                    alert(data.message); // Mostrar mensaje de bienvenida
-                    navigate('/home'); // Navegar al home
-                } else {
-                    alert('Error: No se recibió un token válido.');
-                }
-            } else if (response.status === 401) {
-                alert('Credenciales incorrectas. Verifica tu usuario y contraseña.');
-            } else {
-                alert('Error al conectar con el servidor. Inténtalo de nuevo más tarde.');
-            }
         } catch (error) {
             console.error('Error al conectar con la API:', error);
             alert('Hubo un problema al conectar con el servidor.');
