@@ -1,17 +1,11 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
 import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
 
 import { Link } from 'react-router-dom';
-import * as React from "react"
+import React, { useEffect } from 'react';
+
 import {
-  AudioWaveform,
   BookOpen,
-  Ambulance,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
   PieChart,
   Settings2,
   CircleUserRound,
@@ -33,89 +27,70 @@ import {
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "juanp",
+    email: "desarrollador",
+    avatar: "./juanpi.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Empleados",
+      title: "Administrar",
       url: "#",
       icon: CircleUserRound,
       isActive: true,
       items: [
         {
-                title: "Añadir Empleado",
-                url: "/addEmploye"
+          title: "Usuarios",
+          url: "/Administrar/Usuarios"
                 
         },
         {
-          title: "Starred",
+          title: "Proveedores",
           url: "#"
-          
-          
         },
         {
-          title: "Settings",
+          title: "",
           url: "#"
-        },
+        }
       ],
     },
     {
-      title: "Incapacidades",
+      title: "Gestionar",
       url: "#",
-      icon: Ambulance,
+      icon: PieChart,
       items: [
         {
-          title: "Añadir incapacidad",
-          url: "/addIncapacity",
+          title: "Ausencias",
+          url: "/Gestionar/Ausencias",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Permisos",
+          url: "/Gestionar/Permisos",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Vacaciones",
+          url: "/Gestionar/Vacaciones",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Informar",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Documentación",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Póliticas",
           url: "#",
         },
         {
-          title: "Tutorials",
+          title: "",
           url: "#",
         },
         {
-          title: "Changelog",
+          title: "",
           url: "#",
         },
       ],
@@ -126,45 +101,16 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: "General",
+          title: "",
           url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
+        }
       ],
     },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+  ]
 }
 
 
-export function AppSidebar({setIsAuthenticated,  ...props }) {
+export function AppSidebar({setIsAuthenticated,...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -173,7 +119,7 @@ export function AppSidebar({setIsAuthenticated,  ...props }) {
             <SidebarMenuButton size="lg" asChild>
               <Link to="/home">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <img src="./mfflogo.png" alt="" srcset="" />
+                  <img src="./mfflogo.png" alt=""/>
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">Money Free Flex Gestión</span>

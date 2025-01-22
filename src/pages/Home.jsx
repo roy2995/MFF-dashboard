@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import {Chart1} from "./charts/Chart1"
 
-export const Home = () => {
+export const Home = ({ setIsAuthenticated, isAuthenticated }) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('User is authenticated');
+      // Perform any actions needed after login
+    }
+  }, [isAuthenticated]);
   return (
     <>
      <div className="flex flex-1 flex-col text-center gap-4 p-4 pt-0 mt-6">

@@ -6,12 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast"
 
-export const AddIncapacity =()=> {
+export const AddPermiso = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
   const { toast } = useToast();
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     toast({
@@ -25,7 +25,6 @@ export const AddIncapacity =()=> {
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
-    
     <form onSubmit={handleSubmit} className="items-center space-y-6">
       <div className="space-y-2">
         <Label htmlFor="startDate">Start Date</Label>
@@ -73,7 +72,7 @@ export const AddIncapacity =()=> {
         Submit Request
       </Button>
     </form>
-   
     </div>
-  );
+  )
 }
+

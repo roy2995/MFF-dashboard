@@ -1,5 +1,5 @@
 
-const api_url = 'http://192.168.68.102:8080';
+const api_url = 'http://localhost:8080';
 
 export async function signIn(path, username, password, setIsAuthenticated, navigate) {
     try {
@@ -20,16 +20,7 @@ export async function signIn(path, username, password, setIsAuthenticated, navig
         if (response.ok) {
             const data = await response.json();
 
-            console.log('Respuesta de la API:', data);
-
-            if (data.token) {
-                setIsAuthenticated(true);
-                localStorage.setItem('token', data.token); // Guardar el token en localStorage
-                alert(data.message); // Mostrar mensaje de bienvenida
-                navigate('/home'); // Navegar al home
-            } else {
-                alert('Error: No se recibió un token válido.');
-            }
+            return data;
         } else if (response.status === 401) {
             alert('Credenciales incorrectas. Verifica tu usuario y contraseña.');
         } else {

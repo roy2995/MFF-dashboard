@@ -14,8 +14,12 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
 
         try {
 
-           await signIn('login', username, password, setIsAuthenticated, navigate);
-
+        const data = await signIn('login', username, password);
+        if (data.token) {
+        localStorage.setItem('token', data.token); // Store token in localStorage
+        setIsAuthenticated(true);
+        navigate('/home');
+      }
         } catch (error) {
             console.error('Error al conectar con la API:', error);
             alert('Hubo un problema al conectar con el servidor.');

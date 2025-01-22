@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast"
+import seaImage from '../../assets/sea.png';
+import palms from '../../assets/palms.png';
+export const AddVacaciones = () => {
 
-export const AddIncapacity =()=> {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
@@ -24,9 +26,10 @@ export const AddIncapacity =()=> {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
-    
-    <form onSubmit={handleSubmit} className="items-center space-y-6">
+    <>
+      <div className="relative w-full h-screen bg-cover bg-center" style={{ backgroundImage: `url(${seaImage})` }}>
+        <div className="relative w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4 bg-white bg-opacity-80 z-10">
+        <form onSubmit={handleSubmit} className="items-center space-y-6">
       <div className="space-y-2">
         <Label htmlFor="startDate">Start Date</Label>
         <div className="relative">
@@ -64,7 +67,7 @@ export const AddIncapacity =()=> {
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required
-          className="min-h-[400px]"
+          className="min-h-[300px]"
           placeholder="Please provide details about your absence request..."
         />
       </div>
@@ -73,7 +76,10 @@ export const AddIncapacity =()=> {
         Submit Request
       </Button>
     </form>
-   
-    </div>
+        </div>
+       
+      </div>
+    </>
   );
 }
+
