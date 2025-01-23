@@ -1,8 +1,8 @@
 import React from 'react'
-import { UserRegistrationForm } from './forms/AddEmploye'
+import { UserTable } from './Users'
 
 export const EmployeProfile = () =>{
   return (
-    <UserRegistrationForm />
+    <UserTable />
   )
 }

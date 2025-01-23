@@ -2,24 +2,28 @@ import { useState } from 'react';
 import { User, LockKeyhole, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '/icono.png';
+import {signIn} from '../lib/api_gateway';
 
 export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        
-        if (username === 'user' && password === '1234') { // Reemplazá con tu lógica real de autenticación
-            setIsAuthenticated(true);
-            console.log('Username:', username);
-            console.log('Password:', password);
-            
-            navigate('/home'); // Navegar al home después de iniciar sesión
-          } else {
-            alert('Credenciales incorrectas');
-          }
+
+        try {
+
+        const data = await signIn('login', username, password);
+        if (data.token) {
+        localStorage.setItem('token', data.token); // Store token in localStorage
+        setIsAuthenticated(true);
+        navigate('/home');
+      }
+        } catch (error) {
+            console.error('Error al conectar con la API:', error);
+            alert('Hubo un problema al conectar con el servidor.');
+        }
     };
 
     return (
@@ -78,5 +82,3 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
         </div>
     );
 }
-
-
