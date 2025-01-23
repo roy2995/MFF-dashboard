@@ -40,34 +40,19 @@ export const fetchUsers = async () => {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('Acceso no autorizado');
 
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-        const response = await fetch(`${api_url}/api/v1/users/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        if (response.status === 401) {
-            localStorage.removeItem('token');
-            throw new Error('Sesión expirada');
+    const response = await fetch(`${api_url}/api/v1/users/`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
         }
-        
-        if (!response.ok) throw new Error('Error al obtener usuarios');
-        
-        return await response.json();
-        
-    } catch (error) {
-        if (error.name === 'AbortError') {
-            throw new Error('Tiempo de espera agotado');
-        }
-        throw error;
+    });
+
+    if (response.status === 401) {
+        localStorage.removeItem('token');
+        throw new Error('Sesión expirada');
     }
+
+    if (!response.ok) throw new Error('Error al obtener usuarios');
+    
+    return await response.json(); // Devuelve la lista de usuarios directamente
 };
