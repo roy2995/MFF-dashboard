@@ -1,5 +1,5 @@
 
-const api_url = 'http://localhost:8080';
+const api_url = 'http://192.168.68.107:8080';
 
 export async function signIn(path, username, password, setIsAuthenticated, navigate) {
     try {
@@ -35,3 +35,39 @@ export async function signIn(path, username, password, setIsAuthenticated, navig
         }
     }
 }
+
+export const fetchUsers = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        const response = await fetch(`${api_url}/api/v1/users/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            throw new Error('Sesión expirada');
+        }
+        
+        if (!response.ok) throw new Error('Error al obtener usuarios');
+        
+        return await response.json();
+        
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Tiempo de espera agotado');
+        }
+        throw error;
+    }
+};
