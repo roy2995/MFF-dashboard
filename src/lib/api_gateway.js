@@ -54,5 +54,55 @@ export const fetchUsers = async () => {
 
     if (!response.ok) throw new Error('Error al obtener usuarios');
     
-    return await response.json(); // Devuelve la lista de usuarios directamente
+    return await response.json(); 
+};
+
+export const createUser = async (userData) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+
+    // Estructura del cuerpo requerido por la API
+    const requestBody = {
+        username: userData.username,
+        password: userData.password,
+        usuarioDetalle: {
+            allName: userData.fullName,
+            cip: userData.dni,
+            address: userData.direction,
+            phone: userData.phone,
+            email: userData.email,
+            dateOfBirth: userData.dateBorn,
+            bloodType: userData.bloodType,
+            emergencyContact: userData.emergencyContactName,
+            emergencyPhone: userData.emergencyContactPhone,
+            cargo: userData.cargo,
+            usersRoles: [{ id: 2 }] // Rol por defecto
+        },
+        enabled: true,
+        accountNonLocked: true,
+        credentialsNonExpired: true,
+        accountNonExpired: true
+    };
+
+    try {
+        const response = await fetch(`${api_url}/api/v1/users/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al crear usuario');
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        console.error('Error en createUser:', error);
+        throw error;
+    }
 };

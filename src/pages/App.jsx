@@ -13,6 +13,7 @@ import {EmployeProfile} from './EmployeProfile';
 import {AddIncapacity} from "./forms/AddIncapacity";
 import {AddPermiso} from "./forms/AddPermiso";
 import {AddVacaciones} from "./forms/AddVacaciones";
+import {UserRegistrationForm} from "./forms/AddEmploye";
 import React, { useState, useEffect } from 'react';
 
 
@@ -57,10 +58,16 @@ function App() {
               element={isAuthenticated ? <Home setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" replace />}
             />
 
-            {/* Ruta para agregar empleado */}
+            {/* Ruta ver listado de usuarios */}
             <Route
               path="/Administrar/Usuarios"
               element={isAuthenticated ? <EmployeProfile /> : <Navigate to="/login" replace />}
+            />
+
+            {/* Ruta para agregar usuario */}
+            <Route
+              path="/Administrar/Usuarios/add"
+              element={isAuthenticated ? <UserRegistrationForm /> : <Navigate to="/login" replace />}
             />
 
             {/* Ruta para agregar incapacidad */}

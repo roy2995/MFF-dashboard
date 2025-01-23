@@ -1,13 +1,14 @@
 import * as React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash2, UserRoundPen } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Trash2, UserRoundPen, Plus } from "lucide-react";
 import { fetchUsers } from '../lib/api_gateway';
+import { useNavigate } from 'react-router-dom';
 
 const UserRow = ({ user, onEdit, onDelete }) => (
     <div className="grid grid-cols-4 gap-4 items-center text-md">
-        <Label className="text-lg">{user.username}</Label> {/* Usamos username */}
+        <Label className="text-lg">{user.username}</Label> 
         <Label className="text-lg">{user.cargo}</Label>
         <div>
             <Button variant="ghost" onClick={() => onEdit(user)}>
@@ -26,12 +27,12 @@ export const UserTable = () => {
     const [users, setUsers] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState("");
+    const navigate = useNavigate();
 
-    // Cargar usuarios al montar el componente
     React.useEffect(() => {
         const loadUsers = async () => {
             try {
-                const usersData = await fetchUsers(); // Llama a la función de la API
+                const usersData = await fetchUsers();
                 setUsers(usersData);
             } catch (err) {
                 setError(err.message);
@@ -43,15 +44,16 @@ export const UserTable = () => {
         loadUsers();
     }, []);
 
-    // Manejadores de eventos
     const handleEdit = (user) => {
         console.log("Editar usuario:", user);
-        // Lógica para editar (puedes abrir un modal aquí)
     };
 
     const handleDelete = (user) => {
         console.log("Eliminar usuario:", user);
-        // Lógica para eliminar (confirmación + llamada a la API)
+    };
+
+    const handleAddClick = () => {
+        navigate('/Administrar/Usuarios/add');
     };
 
     if (loading) return <div>Cargando usuarios...</div>;
@@ -77,6 +79,14 @@ export const UserTable = () => {
                         onDelete={handleDelete}
                     />
                 ))}
+
+                {/* Botón debajo de la tabla */}
+                <div className="flex justify-center mt-4">
+                    <Button onClick={handleAddClick}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Agregar Usuario
+                    </Button>
+                </div>
             </div>
         </Card>
     );
