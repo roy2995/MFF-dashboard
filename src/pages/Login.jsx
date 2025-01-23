@@ -19,7 +19,15 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
         localStorage.setItem('token', data.token); // Store token in localStorage
         setIsAuthenticated(true);
         navigate('/home');
-      }
+        }
+
+        if (data.roleNme){
+            localStorage.setItem('roleNme',data.roleNme)
+        }
+
+        if(data.username){
+            localStorage.setItem('username',data.username)
+        }
         } catch (error) {
             console.error('Error al conectar con la API:', error);
             alert('Hubo un problema al conectar con el servidor.');

@@ -64,6 +64,13 @@ module.exports = {
 		fontFamily: {
 		  sans: ['Urbanist', 'sans-serif'], // Fuente Urbanist agregada aquí
 		},
+		screens: {
+			'sm': '640px',
+			'md': '768px',
+			'lg': '1024px',
+			'xl': '1280px', // Modify this value to set the resolution for xl
+			'2xl': '1536px',
+		  },
 	  },
 	},
 	plugins: [require('tailwindcss-animate')],

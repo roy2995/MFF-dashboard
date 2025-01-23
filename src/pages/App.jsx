@@ -20,13 +20,20 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación
+  const [isAdmin, setIsAdmin] = useState(false);//estado de ser admin
   useEffect(() => {
     // Check if token exists in localStorage
     const token = localStorage.getItem('token');
+    const admin = localStorage.getItem('roleNme')
+    if(admin == 1){
+      setIsAdmin(true)
+    }
     if (token) {
       setIsAuthenticated(true);
     }
   }, []);
+
+  console.log("is admin?: " + isAdmin)
   return (
     <Router>
     <SidebarProvider>
@@ -64,10 +71,13 @@ function App() {
             />
 
             {/* Ruta para agregar incapacidad */}
+           
             <Route
               path="/Gestionar/Ausencias"
               element={isAuthenticated ? <AddIncapacity /> : <Navigate to="/login" replace />}
             />
+
+           
 
             {/* Ruta para agregar incapacidad */}
             <Route

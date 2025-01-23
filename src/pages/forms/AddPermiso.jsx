@@ -12,22 +12,37 @@ export const AddPermiso = () => {
   const [reason, setReason] = useState("");
   const { toast } = useToast();
   
+  const condicion = true
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast({
-      title: "Request Submitted",
-      description: "Your absence request has been submitted successfully.",
-    });
+    
+    if (condicion){
+      toast({
+        variant: "success",
+        title: "Solicitud enviada",
+        description: "Debe esperar que sea aprobada por el administrador."
+      });
+      console.log(startDate + " ," + endDate + ", " + " razon: "+ reason);
     setStartDate("");
     setEndDate("");
     setReason("");
+    }else{
+      toast({
+        variant: "destructive",
+        title: "Oh.. ocurrio un error",
+        description: "Debe ponerse en contacto con el administrador."
+      });
+    }
+   
+
+    
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
     <form onSubmit={handleSubmit} className="items-center space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="startDate">Start Date</Label>
+        <Label htmlFor="startDate">Desde</Label>
         <div className="relative">
           <Input
             id="startDate"
@@ -42,7 +57,7 @@ export const AddPermiso = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="endDate">End Date</Label>
+        <Label htmlFor="endDate">Hasta</Label>
         <div className="relative">
           <Input
             id="endDate"
@@ -57,19 +72,19 @@ export const AddPermiso = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="reason">Reason for Absence</Label>
+        <Label htmlFor="reason">Razón</Label>
         <Textarea
           id="reason"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required
-          className="min-h-[400px]"
-          placeholder="Please provide details about your absence request..."
+          className="min-h-[200px] sm:min-h-[250px] md:min-h-[250px] lg:min-h-[250px] xl:min-h-[250px] 2xl:min-h-[500px]"
+          placeholder="Porfavor agregue los detalles de su permiso..."
         />
       </div>
 
       <Button type="submit" className="w-full">
-        Submit Request
+        Enviar Solicitud
       </Button>
     </form>
     </div>
