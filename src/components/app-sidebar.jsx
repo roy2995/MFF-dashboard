@@ -1,9 +1,7 @@
 import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
-
 import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
-
 import {
   BookOpen,
   PieChart,
@@ -21,16 +19,13 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import {useApiGateway} from '../lib/useApiGateway'
+import { fetchOneUser } from "@/lib/api_gateway";
 
 
 
 // This is sample data.
 const data = {
-  user: {
-    name: "juanp",
-    email: "desarrollador",
-    avatar: "./juanpi.jpg",
-  },
   navMain: [
     {
       title: "Administrar",
@@ -59,7 +54,7 @@ const data = {
       icon: PieChart,
       items: [
         {
-          title: "Ausencias",
+          title: "Asistencia",
           url: "/Gestionar/Ausencias",
         },
         {
@@ -108,9 +103,10 @@ const data = {
     },
   ]
 }
-
-
-export function AppSidebar({setIsAuthenticated,...props }) {
+const username = localStorage.getItem('username');
+export function AppSidebar({setIsAuthenticated,setIsAdmin,...props }) {
+  
+  const { data: posts } = useApiGateway(() => fetchOneUser(`/api/v1/users/username/${username}`));
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -134,7 +130,7 @@ export function AppSidebar({setIsAuthenticated,...props }) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} setIsAuthenticated={setIsAuthenticated} />
+        <NavUser dataUser={posts} setIsAuthenticated={setIsAuthenticated} setIsAdmin={setIsAdmin} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

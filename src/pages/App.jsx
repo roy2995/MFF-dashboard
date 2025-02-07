@@ -19,25 +19,15 @@ import React, { useState, useEffect } from 'react';
 
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación
-  const [isAdmin, setIsAdmin] = useState(false);//estado de ser admin
-  useEffect(() => {
-    // Check if token exists in localStorage
-    const token = localStorage.getItem('token');
-    const admin = localStorage.getItem('roleNme')
-    if(admin == 1){
-      setIsAdmin(true)
-    }
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  console.log("is admin?: " + isAdmin)
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token')); // Estado de autenticación
+  const [isAdmin, setIsAdmin] = useState()
+ 
+  console.log('is admin?: ' + isAdmin)
+  console.log('is auth?: ' + isAuthenticated)
   return (
     <Router>
     <SidebarProvider>
-      {isAuthenticated && <AppSidebar setIsAuthenticated={setIsAuthenticated} />}
+      {isAuthenticated && <AppSidebar setIsAuthenticated={setIsAuthenticated}  />}
       <div className="flex flex-col w-full">
         {isAuthenticated && (
           <header className="flex h-16 border-b shadow-lg">
@@ -55,7 +45,7 @@ function App() {
             {/* Ruta para el login */}
             <Route
               path="/login"
-              element={!isAuthenticated ? <LoginForm setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} /> : <Navigate to="/home" replace />}
+              element={!isAuthenticated ? <LoginForm setIsAuthenticated={setIsAuthenticated} setIsAdmin={setIsAdmin} /> : <Navigate to="/home" replace />}
             />
 
             {/* Ruta para el home */}
@@ -74,7 +64,7 @@ function App() {
            
             <Route
               path="/Gestionar/Ausencias"
-              element={isAuthenticated ? <AddIncapacity /> : <Navigate to="/login" replace />}
+              element={isAuthenticated ? <AddIncapacity isAdmin={isAdmin}/> : <Navigate to="/login" replace />}
             />
 
            

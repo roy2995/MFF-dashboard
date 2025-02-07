@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '/icono.png';
 import {signIn} from '../lib/api_gateway';
 
-export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
+export function LoginForm({ setIsAuthenticated, setIsAdmin }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -15,14 +15,15 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
         try {
 
         const data = await signIn('login', username, password);
+        if (data.roleNme === "1"){
+            setIsAdmin(true);
+        }else{
+            setIsAdmin(false);
+        }
         if (data.token) {
         localStorage.setItem('token', data.token); // Store token in localStorage
         setIsAuthenticated(true);
         navigate('/home');
-        }
-
-        if (data.roleNme){
-            localStorage.setItem('roleNme',data.roleNme)
         }
 
         if(data.username){
