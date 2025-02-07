@@ -13,7 +13,7 @@ import {EmployeProfile} from './EmployeProfile';
 import {AddIncapacity} from "./forms/AddIncapacity";
 import {AddPermiso} from "./forms/AddPermiso";
 import {AddVacaciones} from "./forms/AddVacaciones";
-import {UserRegistrationForm} from "./forms/AddEmploye";
+import {UserForm} from "./forms/AddEmploye";
 import React, { useState, useEffect } from 'react';
 
 
@@ -67,7 +67,7 @@ function App() {
             {/* Ruta para agregar usuario */}
             <Route
               path="/Administrar/Usuarios/add"
-              element={isAuthenticated ? <UserRegistrationForm /> : <Navigate to="/login" replace />}
+              element={isAuthenticated ? <UserForm /> : <Navigate to="/login" replace />}
             />
 
             {/* Ruta para agregar incapacidad */}

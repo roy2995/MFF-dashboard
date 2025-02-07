@@ -1,5 +1,5 @@
 
-const api_url = 'http://192.168.68.107:8080';
+const api_url = 'http://192.168.68.112:8080';
 
 export async function signIn(path, username, password, setIsAuthenticated, navigate) {
     try {
@@ -106,3 +106,55 @@ export const createUser = async (userData) => {
         throw error;
     }
 };
+
+export const updateUser = async (userId, userData) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+
+    // Estructura del cuerpo requerido por la API
+    const requestBody = {
+        username: userData.username,
+        password: userData.password,
+        usuarioDetalle: {
+            usersRoles: userData.usuarioDetalle.usersRoles.map(role => ({ id: role.id })), // Mapea los roles
+            allName: userData.usuarioDetalle.allName,
+            cip: userData.usuarioDetalle.cip,
+            address: userData.usuarioDetalle.address,
+            phone: userData.usuarioDetalle.phone,
+            email: userData.usuarioDetalle.email,
+            dateOfBirth: userData.usuarioDetalle.dateOfBirth,
+            bloodType: userData.usuarioDetalle.bloodType,
+            emergencyContact: userData.usuarioDetalle.emergencyContact,
+            emergencyPhone: userData.usuarioDetalle.emergencyPhone,
+            cargo: userData.usuarioDetalle.cargo,
+            photo: userData.usuarioDetalle.photo
+        },
+        enabled: true,
+        accountNonLocked: true,
+        credentialsNonExpired: true,
+        accountNonExpired: true
+    };
+
+    try {
+        const response = await fetch(`http://192.168.68.112:9001/api/v1/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al actualizar el usuario');
+        }
+
+        return await response.json(); // Retorna los datos actualizados del usuario
+
+    } catch (error) {
+        console.error('Error en updateUser:', error);
+        throw error;
+    }
+};
+

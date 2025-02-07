@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { User, LockKeyhole, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '/icono.png';
-import {signIn} from '../lib/api_gateway';
+import { signIn } from '../lib/api_gateway';
 
 export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
     const [username, setUsername] = useState('');
@@ -12,22 +12,31 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        try {
+        // Limpiar espacios y validar campos
+        const trimmedUsername = username.trim();
+        const trimmedPassword = password.trim();
 
-        const data = await signIn('login', username, password);
-        if (data.token) {
-        localStorage.setItem('token', data.token); // Store token in localStorage
-        setIsAuthenticated(true);
-        navigate('/home');
-      }
+        if (!trimmedUsername || !trimmedPassword) {
+            alert('Por favor ingrese usuario y contraseña válidos');
+            return;
+        }
+
+        try {
+            const data = await signIn('login', trimmedUsername, trimmedPassword);
+            
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                setIsAuthenticated(true);
+                navigate('/home');
+            }
         } catch (error) {
-            console.error('Error al conectar con la API:', error);
-            alert('Hubo un problema al conectar con el servidor.');
+            console.error('Error de autenticación:', error);
+            alert(error.message || 'Credenciales incorrectas o error de conexión');
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-darkGrey">
+        <div className="flex items-center justify-center min-h-screen bg-black">
             <div className="w-full max-w-md space-y-8 bg-white p-10 rounded-xl shadow-md">
                 <div className="flex justify-center">
                     <img src={Logo} alt="logo" className="w-20 h-20 shadow-m" />
@@ -36,7 +45,7 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
                 <form className="mt-8 flex flex-col items-center space-y-6" onSubmit={handleSubmit}>
                     <div className="space-y-4 w-full max-w-sm flex flex-col items-center">
                         <div className="relative w-full">
-                            <label className="sr-only">UserName</label>
+                            <label className="sr-only">Usuario</label>
                             <User className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" size={20} />
                             <input
                                 id="username"
@@ -45,9 +54,10 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
                                 autoComplete="username"
                                 required
                                 className="pl-10 w-full border border-gray-300 rounded-md p-2"
-                                placeholder="user"
+                                placeholder="Usuario"
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={(e) => setUsername(e.target.value.replace(/\s{2,}/g, ' '))} // Previene múltiples espacios
+                                onBlur={(e) => setUsername(e.target.value.trim())} // Limpia al salir del campo
                             />
                         </div>
                         <div className="relative w-full">
@@ -60,9 +70,10 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
                                 autoComplete="current-password"
                                 required
                                 className="pl-10 w-full border border-gray-300 rounded-md p-2"
-                                placeholder="password"
+                                placeholder="Contraseña"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                onBlur={(e) => setPassword(e.target.value.trim())} // Limpia al salir del campo
                             />
                         </div>
                     </div>
