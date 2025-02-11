@@ -7,7 +7,7 @@ function InputImage() {
         console.log(e.target.files);
         setFile(URL.createObjectURL(e.target.files[0]));
     }
-    console.log(file)
+    
   return (
     <div className="p-4 bg-gray-100 rounded shadow-md">
     <h2 className="text-lg font-semibold mb-2">Add Image:</h2>

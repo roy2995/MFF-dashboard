@@ -1,7 +1,8 @@
 
 const api_url = 'http://localhost:8080';
 
-export async function signIn(path, username, password, setIsAuthenticated, navigate) {
+/*
+export async function signIn(path, username, password) {
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 50000); // 10 segundos de tiempo de espera
@@ -34,7 +35,7 @@ export async function signIn(path, username, password, setIsAuthenticated, navig
             alert(`Hubo un problema al conectar con el servidor: ${error.message}`);
         }
     }
-}
+}*/
 
 //funcion para crear un usuario
 export const fetchUsers = async () => {
@@ -77,7 +78,6 @@ export const fetchUsers = async () => {
 //funcion para obtener los datos de un usuario
 export const fetchOneUser = async (path) => {
     const token = localStorage.getItem('token');
-    console.log(token)
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
     const response = await fetch(`${api_url}/${path}`, {
@@ -96,8 +96,11 @@ export const fetchOneUser = async (path) => {
      // Filter the return to match the desired structure
      const filteredData = {
         name: data.username,
+        roleId:  data.usuarioDetalle.usersRoles[0].id,
         cargo: data.usuarioDetalle.cargo,
-        avatar: data.usuarioDetalle.phone
+        photo: data.usuarioDetalle.photo,
+        phone: data.usuarioDetalle.phone,
+        email: data.usuarioDetalle.email
     };
 
     return filteredData;

@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { User, LockKeyhole, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '/icono.png';
-import {signIn} from '../lib/api_gateway';
+import { useAdmin } from '@/contexto/AdminContext'; 
 
-export function LoginForm({ setIsAuthenticated, setIsAdmin }) {
+export function LoginForm({ setIsAuthenticated }) {
+    const { signIn } = useAdmin();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -15,23 +16,19 @@ export function LoginForm({ setIsAuthenticated, setIsAdmin }) {
         try {
 
         const data = await signIn('login', username, password);
-        if (data.roleNme === "1"){
-            setIsAdmin(true);
-        }else{
-            setIsAdmin(false);
-        }
+        
         if (data.token) {
         localStorage.setItem('token', data.token); // Store token in localStorage
-        setIsAuthenticated(true);
-        navigate('/home');
         }
 
         if(data.username){
             localStorage.setItem('username',data.username)
         }
+
+        setIsAuthenticated(true);
+        navigate('/home');
         } catch (error) {
-            console.error('Error al conectar con la API:', error);
-            alert('Hubo un problema al conectar con el servidor.');
+            console.error('Error al conectar con la API: BOTON DE INICIO DE SESION', error);
         }
     };
 

@@ -14,20 +14,25 @@ import {AddIncapacity} from "./forms/AddIncapacity";
 import {AddPermiso} from "./forms/AddPermiso";
 import {AddVacaciones} from "./forms/AddVacaciones";
 import React, { useState, useEffect } from 'react';
-
-
-
+import { QueryAusencias } from "./consult/queryAusencias";
+import { QueryPermisos } from "./consult/queryPermisos";
+import { QueryVacations } from "./consult/queryVacations"; 
+import { getUserInfoFromToken } from '@/lib/utils';
+import { useAdmin } from '../contexto/AdminContext';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token')); // Estado de autenticación
-  const [isAdmin, setIsAdmin] = useState()
- 
-  console.log('is admin?: ' + isAdmin)
+  const username = getUserInfoFromToken(localStorage.getItem('token')) ;
+  const { isAdmin } = useAdmin(); // Ahora tenemos acceso al rol
+
+  console.log(username)
   console.log('is auth?: ' + isAuthenticated)
+  console.log('is Admin?'  + isAdmin)
   return (
+   
     <Router>
     <SidebarProvider>
-      {isAuthenticated && <AppSidebar setIsAuthenticated={setIsAuthenticated}  />}
+      {isAuthenticated && <AppSidebar setIsAuthenticated={setIsAuthenticated} user={username.username} />}
       <div className="flex flex-col w-full">
         {isAuthenticated && (
           <header className="flex h-16 border-b shadow-lg">
@@ -45,13 +50,13 @@ function App() {
             {/* Ruta para el login */}
             <Route
               path="/login"
-              element={!isAuthenticated ? <LoginForm setIsAuthenticated={setIsAuthenticated} setIsAdmin={setIsAdmin} /> : <Navigate to="/home" replace />}
+              element={!isAuthenticated ? <LoginForm setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/home" replace />}
             />
 
             {/* Ruta para el home */}
             <Route
               path="/home"
-              element={isAuthenticated ? <Home setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} /> : <Navigate to="/login" replace />}
+              element={isAuthenticated ? <Home  isAuthenticated={isAuthenticated} /> : <Navigate to="/login" replace />}
             />
 
             {/* Ruta para agregar empleado */}
@@ -63,23 +68,49 @@ function App() {
             {/* Ruta para agregar incapacidad */}
            
             <Route
-              path="/Gestionar/Ausencias"
-              element={isAuthenticated ? <AddIncapacity isAdmin={isAdmin}/> : <Navigate to="/login" replace />}
+              path="/Gestionar/Asistencia/Registrar"
+              element={isAuthenticated ? <AddIncapacity/> : <Navigate to="/login" replace />}
             />
+
+            {isAdmin && (
+              <Route
+                path="/Gestionar/Asistencia/Consultar"
+                element={isAuthenticated ? <QueryAusencias/> : <Navigate to="/login" replace />}
+              />
+            )}
+            
 
            
 
             {/* Ruta para agregar incapacidad */}
             <Route
-              path="/Gestionar/Permisos"
+              path="/Gestionar/Permisos/Registrar"
               element={isAuthenticated ? <AddPermiso /> : <Navigate to="/login" replace />}
             />
 
+            
+            {/* Ruta para consultar incapacidad */}
+            {isAdmin && (
+            <Route
+              path="/Gestionar/Permisos/Consultar"
+              element={isAuthenticated ? <QueryPermisos /> : <Navigate to="/login" replace />}
+            />)}
+           
+
              {/* Ruta para agregar incapacidad */}
              <Route
-              path="/Gestionar/Vacaciones"
+              path="/Gestionar/Vacaciones/Registrar"
               element={isAuthenticated ? <AddVacaciones /> : <Navigate to="/login" replace />}
             />
+
+            {/* Ruta para agregar incapacidad */}
+            {isAdmin && (
+              <Route
+              path="/Gestionar/Vacaciones/Consultar"
+              element={isAuthenticated ? <QueryVacations /> : <Navigate to="/login" replace />}
+              />
+            )}
+           
 
             {/* Ruta para manejar rutas no encontradas */}
             <Route

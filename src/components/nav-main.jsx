@@ -22,9 +22,7 @@ import {
   SidebarMenuAction
 } from "@/components/ui/sidebar"
 import { Link } from 'react-router-dom';
-export function NavMain({
-  items,
-}) {
+export function NavMain({items,}) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel className={"text-3xl"}>MENÚ</SidebarGroupLabel>
