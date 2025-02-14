@@ -107,43 +107,128 @@ export const UserForm = ({ user }) => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4 grid grid-cols-2 bg-white">
-      {/* Información general */}
-      <div className="p-4">
+    <div className="w-full max-w-4xl mx-auto p-6 border border-zinc-700 rounded-md shadow-md mt-4 grid grid-cols-2 gap-6 bg-white">
+      {/* Columna Izquierda */}
+      <div className="p-4 w-full">
+        <h2 className="text-lg font-semibold mb-4">Información General</h2>
         <div className="flex flex-col items-center">
-          <div className="w-32 h-32 rounded-full overflow-hidden border border-gray-300">
+          <label htmlFor="imageUpload" className="cursor-pointer w-32 h-32 rounded-full overflow-hidden border border-zinc-700 flex items-center justify-center">
             {previewImage ? (
               <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200">Foto</div>
+              <div className="w-full h-full flex items-center justify-center bg-zinc-200 text-gray-500">
+                Foto
+              </div>
             )}
-          </div>
+          </label>
+          <input id="imageUpload" type="file" onChange={handleImageChange} className="hidden" />
         </div>
-        <div className="grid gap-4 mt-4">
-          <Label htmlFor="fullName">Nombre completo *</Label>
-          <input id="fullName" type="text" name="fullName" value={formData.fullName} onChange={handleChange} required className="input" />
-          <Label htmlFor="cargo">Cargo *</Label>
-          <input id="cargo" type="text" name="cargo" value={formData.cargo} onChange={handleChange} required className="input" />
-          <Label htmlFor="email">Correo electrónico *</Label>
-          <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required className="input" />
+
+        <div className="grid gap-4 mt-4 w-full p-2">
+          <div>
+            <Label htmlFor="fullName">Nombre Completo*</Label>
+            <input id="fullName" type="text" name="fullName" value={formData.fullName} onChange={handleChange} required 
+              className="border-b border-zinc-300 p-2 w-full outline-none" />
+          </div>
+          
+          <div>
+            <Label htmlFor="cargo">Cargo*</Label>
+            <select id="cargo" name="cargo" value={formData.cargo} onChange={handleChange} required 
+              className="border-b border-zinc-300 p-2 w-full outline-none">
+              <option value="">Seleccione un cargo</option>
+              <option value="Gerente">Gerente</option>
+              <option value="Supervisor">Supervisor</option>
+              <option value="Empleado">Empleado</option>
+            </select>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="email">Correo Electrónico*</Label>
+              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required 
+                className="border-b border-zinc-300 p-2 w-full outline-none" />
+            </div>
+            
+            <div>
+              <Label htmlFor="bloodType">Tipo de Sangre*</Label>
+              <select id="bloodType" name="bloodType" value={formData.bloodType} onChange={handleChange} required 
+                className="border-b border-zinc-300 p-2 w-full outline-none">
+                <option value="">Seleccione tipo</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="dni">Número de Documento*</Label>
+              <input id="dni" type="text" name="dni" value={formData.dni} onChange={handleChange} required 
+                className="border-b border-zinc-300 p-2 w-full outline-none" />
+            </div>
+            
+            <div>
+              <Label htmlFor="dateToContract">Fecha de Contrato*</Label>
+              <input id="dateToContract" type="date" name="dateToContract" value={formData.dateToContract} onChange={handleChange} required 
+                className="border-b border-zinc-300 p-2 w-full outline-none" />
+            </div>
+          </div>
         </div>
       </div>
-      {/* Detalles de contacto */}
-      <div className="p-4 bg-black text-white">
-        <Label htmlFor="direction">Dirección</Label>
-        <input id="direction" type="text" name="direction" value={formData.direction} onChange={handleChange} className="input bg-white text-black" />
-        <div className="grid grid-cols-2 gap-4 mt-4">
+
+      {/* Columna Derecha */}
+      <div className="p-4 w-full bg-black text-white rounded-md">
+        <h2 className="text-lg font-semibold mb-4">Detalle de contacto</h2>
+        <div className="grid gap-4 mt-4 w-full p-2">
           <div>
-            <Label htmlFor="dateBorn">Fecha de nacimiento</Label>
-            <input id="dateBorn" type="date" name="dateBorn" value={formData.dateBorn} onChange={handleChange} className="input bg-white text-black" />
+            <Label htmlFor="direction" className="text-white">Dirección</Label>
+            <input id="direction" type="text" name="direction" value={formData.direction} onChange={handleChange}
+              className="border-b border-zinc-400 p-2 w-full outline-none bg-transparent text-white" />
           </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="dateBorn" className="text-white">Fecha de Nacimiento</Label>
+              <input id="dateBorn" type="date" name="dateBorn" value={formData.dateBorn} onChange={handleChange}
+                className="border-b border-zinc-400 p-2 w-full outline-none bg-transparent text-white" />
+            </div>
+            
+            <div>
+              <Label htmlFor="phone" className="text-white">Teléfono</Label>
+              <input id="phone" type="tel" name="phone" value={formData.phone} onChange={handleChange}
+                className="border-b border-zinc-400 p-2 w-full outline-none bg-transparent text-white" />
+            </div>
+          </div>
+
           <div>
-            <Label htmlFor="phone">Número de teléfono</Label>
-            <input id="phone" type="text" name="phone" value={formData.phone} onChange={handleChange} className="input bg-white text-black" />
+            <Label htmlFor="emergencyContactPhone" className="text-white">Número de emergencia</Label>
+            <input id="emergencyContactPhone" type="tel" name="emergencyContactPhone" 
+              value={formData.emergencyContactPhone} onChange={handleChange}
+              className="border-b border-zinc-400 p-2 w-full outline-none bg-transparent text-white" />
+          </div>
+
+          <div>
+            <Label htmlFor="emergencyContactName" className="text-white">Contacto de emergencia</Label>
+            <input id="emergencyContactName" type="text" name="emergencyContactName" 
+              value={formData.emergencyContactName} onChange={handleChange}
+              className="border-b border-zinc-400 p-2 w-full outline-none bg-transparent text-white" />
+          </div>
+          <div class="pt-20">
+            <Button onClick={handleCancel}>
+            Cancelar
+            </Button>
+            <Button onClick={onSubmit} disabled={isSubmitting}>
+            {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+            </Button>
           </div>
         </div>
-        <Button type="submit" className="mt-4 w-full bg-white text-black">Aceptar</Button>
-      </div>
+      </div>      
     </div>
   );
 };

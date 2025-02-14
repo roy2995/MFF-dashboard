@@ -1,4 +1,3 @@
-
 const api_url = 'http://192.168.68.112:8080';
 
 export async function signIn(path, username, password, setIsAuthenticated, navigate) {
@@ -157,4 +156,3 @@ export const updateUser = async (userId, userData) => {
         throw error;
     }
 };
-
