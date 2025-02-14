@@ -6,7 +6,7 @@ import {
 import { AppSidebar } from "@/components/app-sidebar"
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './Header';
-
+import { Toaster } from "@/components/ui/toaster";
 import {Home} from "./Home"
 import { LoginForm } from "./Login.jsx"
 import {EmployeProfile} from './EmployeProfile';
@@ -19,11 +19,14 @@ import { QueryPermisos } from "./consult/queryPermisos";
 import { QueryVacations } from "./consult/queryVacations"; 
 import { getUserInfoFromToken } from '@/lib/utils';
 import { useAdmin } from '../contexto/AdminContext';
+import {useApiGateway} from '../lib/useApiGateway';
+import { fetchOneUser } from "@/lib/api_gateway";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token')); // Estado de autenticación
   const username = getUserInfoFromToken(localStorage.getItem('token')) ;
   const { isAdmin } = useAdmin(); // Ahora tenemos acceso al rol
+  const { data: userData } = useApiGateway(() => fetchOneUser(`api/v1/users/username/${username.username}`));
 
   console.log(username)
   console.log('is auth?: ' + isAuthenticated)
@@ -31,15 +34,16 @@ function App() {
   return (
    
     <Router>
+    <Toaster />
     <SidebarProvider>
-      {isAuthenticated && <AppSidebar setIsAuthenticated={setIsAuthenticated} user={username.username} />}
+      {isAuthenticated && <AppSidebar setIsAuthenticated={setIsAuthenticated} posts={userData} />}
       <div className="flex flex-col w-full">
         {isAuthenticated && (
           <header className="flex h-16 border-b shadow-lg">
             <Header />
           </header>
         )}
-        <main className="flex-grow">
+        <main className="flex-grow p-4">
           <Routes>
             {/* Ruta raíz que redirige según el estado de autenticación */}
             <Route
@@ -69,18 +73,16 @@ function App() {
            
             <Route
               path="/Gestionar/Asistencia/Registrar"
-              element={isAuthenticated ? <AddIncapacity/> : <Navigate to="/login" replace />}
+              element={isAuthenticated ? <AddIncapacity username={userData.username}/> : <Navigate to="/login" replace />}
             />
 
             {isAdmin && (
               <Route
                 path="/Gestionar/Asistencia/Consultar"
-                element={isAuthenticated ? <QueryAusencias/> : <Navigate to="/login" replace />}
+                element={isAuthenticated ? <QueryAusencias userData={userData}/> : <Navigate to="/login" replace />}
               />
             )}
             
-
-           
 
             {/* Ruta para agregar incapacidad */}
             <Route

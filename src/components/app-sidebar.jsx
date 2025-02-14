@@ -27,9 +27,9 @@ import { useAdmin } from '../contexto/AdminContext';
 // This is sample data.
 
 
-export function AppSidebar({setIsAuthenticated, user, ...props }) {
+export function AppSidebar({setIsAuthenticated, posts, ...props }) {
 const { isAdmin } = useAdmin(); // Ahora tenemos acceso al rol
-const { data: posts } = useApiGateway(() => fetchOneUser(`api/v1/users/username/${user}`));
+//const { data: posts } = useApiGateway(() => fetchOneUser(`api/v1/users/username/${user}`));
 console.log("appsidebar: is admin"+isAdmin)
 
 

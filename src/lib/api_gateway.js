@@ -97,7 +97,7 @@ export const fetchOneUser = async (path) => {
      const filteredData = {
         name: data.username,
         roleId:  data.usuarioDetalle.usersRoles[0].id,
-        cargo: data.usuarioDetalle.cargo,
+        cargo: data.usuarioDetalle.cargo.cargo,
         photo: data.usuarioDetalle.photo,
         phone: data.usuarioDetalle.phone,
         email: data.usuarioDetalle.email

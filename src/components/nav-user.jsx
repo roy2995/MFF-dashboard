@@ -33,8 +33,6 @@ import {
 export function NavUser({
   dataUser,setIsAuthenticated
 }) {
-  
-  
   const navigate = useNavigate();
   const { isMobile } = useSidebar()
   const handleLogout = () => {
