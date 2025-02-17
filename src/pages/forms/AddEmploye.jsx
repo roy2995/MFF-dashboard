@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";

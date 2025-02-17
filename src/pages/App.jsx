@@ -13,7 +13,6 @@ import {EmployeProfile} from './EmployeProfile';
 import {AddIncapacity} from "./forms/AddIncapacity";
 import {AddPermiso} from "./forms/AddPermiso";
 import {AddVacaciones} from "./forms/AddVacaciones";
-import {UserForm} from "./forms/AddEmploye";
 import React, { useState, useEffect } from 'react';
 import { QueryAusencias } from "./consult/queryAusencias";
 import { QueryPermisos } from "./consult/queryPermisos";
@@ -64,16 +63,10 @@ function App() {
               element={isAuthenticated ? <Home  isAuthenticated={isAuthenticated} /> : <Navigate to="/login" replace />}
             />
 
-            {/* Ruta ver listado de usuarios */}
+            {/* Ruta para agregar empleado */}
             <Route
               path="/Administrar/Usuarios"
               element={isAuthenticated ? <EmployeProfile /> : <Navigate to="/login" replace />}
-            />
-
-            {/* Ruta para agregar usuario */}
-            <Route
-              path="/Administrar/Usuarios/add"
-              element={isAuthenticated ? <UserForm /> : <Navigate to="/login" replace />}
             />
 
             {/* Ruta para agregar incapacidad */}
