@@ -1,25 +1,13 @@
-/*import { Payment, columns } from "./columns"
-import { DataTable } from "./data-table"
+import { useEffect, useState } from "react"
 
-async function getData() {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      permiso: "Pulixe",
-      status: "pending",
-      email: "m@example.com",
-    },
-    // ...
-  ]
-}
+import {DataTablePermisos} from "./TablaPermisos"
 
-export default async function DemoPage() {
-  const data = await getData()
 
+export default  function DemoPage() {
+  
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTablePermisos />
     </div>
   )
 }
