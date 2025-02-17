@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { User, LockKeyhole, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '/icono.png';
-import { signIn } from '../lib/api_gateway';
+import { useAdmin } from '@/contexto/AdminContext'; 
 
-export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
+export function LoginForm({ setIsAuthenticated }) {
+    const { signIn } = useAdmin();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -22,16 +23,21 @@ export function LoginForm({ setIsAuthenticated, isAuthenticated }) {
         }
 
         try {
-            const data = await signIn('login', trimmedUsername, trimmedPassword);
-            
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                setIsAuthenticated(true);
-                navigate('/home');
-            }
+
+        const data = await signIn('login', username, password);
+        
+        if (data.token) {
+        localStorage.setItem('token', data.token); // Store token in localStorage
+        }
+
+        if(data.username){
+            localStorage.setItem('username',data.username)
+        }
+
+        setIsAuthenticated(true);
+        navigate('/home');
         } catch (error) {
-            console.error('Error de autenticación:', error);
-            alert(error.message || 'Credenciales incorrectas o error de conexión');
+            console.error('Error al conectar con la API: BOTON DE INICIO DE SESION', error);
         }
     };
 

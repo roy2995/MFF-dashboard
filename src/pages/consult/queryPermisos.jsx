@@ -1,8 +1,15 @@
 import React from 'react'
-
-export const queryPermisos = () => {
+import DemoPage from '@/pages/consult/permisos/page'
+export const QueryPermisos = () => {
   return (
-    <div>queryPermisos</div>
+<>
+   
+      <div className="w-full mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">  
+        <DemoPage/>
+      </div>
+
+     
+</>
   )
 }
 

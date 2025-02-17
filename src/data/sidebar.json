@@ -1,0 +1,78 @@
+ {
+    "navMain": [
+      {
+        "title": "Administrar",
+        "url": "#",
+        "icon": "user",
+        "isActive": true,
+        "items": [
+          {
+            "title": "Usuarios",
+            "url": "/Administrar/Usuarios"
+                  
+          },
+          {
+            "title": "Proveedores",
+            "url": "#"
+          },
+          {
+            "title": "",
+            "url": "#"
+          }
+        ]
+      },
+      {
+        "title": "Gestionar",
+        "url": "#",
+        "icon": "chart",
+        "items": [
+          {
+            "title": "Ausencias",
+            "url": "/Gestionar/Ausencias"
+          },
+          {
+            "title": "Permisos",
+            "url": "/Gestionar/Permisos"
+          },
+          {
+            "title": "Vacaciones",
+            "url": "/Gestionar/Vacaciones"
+          }
+        ]
+      },
+      {
+        "title": "Informar",
+        "url": "#",
+        "icon": "home",
+        "items": [
+          {
+            "title": "Documentación",
+            "url": "#"
+          },
+          {
+            "title": "Póliticas",
+            "url": "#"
+          },
+          {
+            "title": "",
+            "url": "#"
+          },
+          {
+            "title": "",
+            "url": "#"
+          }
+        ]
+      },
+      {
+        "title": "Settings",
+        "url": "#",
+        "icon": "settings",
+        "items": [
+          {
+            "title": "",
+            "url": "#"
+          }
+        ]
+      }
+    ]
+  }
