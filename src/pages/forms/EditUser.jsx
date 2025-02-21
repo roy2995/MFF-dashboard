@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { createUser } from "../../lib/api_gateway";
+import { updateUser, fetchUserByUsername } from "../../lib/api_gateway";
 
-export const AddUser = () => {
+export const EditUser = () => {
+  const { id } = useParams(); // Se espera que "id" sea el identificador (username o id)
+  const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -19,14 +21,59 @@ export const AddUser = () => {
     email: "",
     bloodType: "",
     dni: "",
-    dateBorn: "",
+    dateToContract: "",
     direction: "",
+    dateBorn: "",
     phone: "",
     emergencyContactPhone: "",
     emergencyContactName: "",
-    profilePicture: "",
-    dateToContract: "" // Campo adicional, si lo necesitas en el formulario
+    profilePicture: ""
   });
+  const [initialData, setInitialData] = useState(null);
+
+  // Función para mapear los datos de la API al formato del formulario.
+  // Si alguna propiedad no existe, se asigna una cadena vacía para que luego se envíe como null.
+  const mapUserData = (data) => ({
+    username: data.username || "",
+    password: "", // No se muestra la contraseña actual
+    fullName: data.usuarioDetalle?.allName || "",
+    cargo: data.usuarioDetalle?.cargo?.cargo || "",
+    email: data.usuarioDetalle?.email || "",
+    bloodType: data.usuarioDetalle?.bloodType || "",
+    dni: data.usuarioDetalle?.cip || "",
+    dateToContract: data.dateToContract || "",
+    direction: data.usuarioDetalle?.address || "",
+    dateBorn: data.usuarioDetalle?.dateOfBirth || "",
+    phone: data.usuarioDetalle?.phone || "",
+    emergencyContactPhone: data.usuarioDetalle?.emergencyPhone || "",
+    emergencyContactName: data.usuarioDetalle?.emergencyContact || "",
+    profilePicture: data.usuarioDetalle?.photo || ""
+  });
+
+  // Se cargan los datos del usuario. Se da preferencia a los datos pasados en location.state;
+  // si no existen se realiza la llamada a la API.
+  useEffect(() => {
+    if (location.state) {
+      const data = location.state;
+      setInitialData(data);
+      const mapped = mapUserData(data);
+      setFormData(mapped);
+      setPreviewImage(mapped.profilePicture || null);
+    } else {
+      const loadUser = async () => {
+        try {
+          const data = await fetchUserByUsername(id);
+          setInitialData(data);
+          const mapped = mapUserData(data);
+          setFormData(mapped);
+          setPreviewImage(mapped.profilePicture || null);
+        } catch (error) {
+          console.error("Error al cargar datos del usuario:", error);
+        }
+      };
+      loadUser();
+    }
+  }, [id, location.state]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,30 +102,47 @@ export const AddUser = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    try {
-      // Construir payload con los datos del formulario
-      const payload = {
-        username: formData.username,
-        // Si la contraseña es necesaria, descomenta la siguiente línea:
-        // password: formData.password,
-        fullName: formData.fullName,
-        dni: formData.dni,
-        direction: formData.direction,
-        phone: formData.phone,
-        email: formData.email,
-        dateBorn: formData.dateBorn,
-        bloodType: formData.bloodType,
-        emergencyContactName: formData.emergencyContactName,
-        emergencyContactPhone: formData.emergencyContactPhone,
-        cargo: formData.cargo, // Se enviará el valor seleccionado: "Gerente", "Supervisor" o "Empleado"
-        profilePicture: formData.profilePicture
-      };
 
-      console.log("Payload a enviar:", payload);
-      await createUser(payload);
+    // Mapeo para convertir el valor textual del cargo en id numérico
+    const cargoMapping = {
+      "Gerente": 1,
+      "Supervisor": 2,
+      "Empleado": 3
+    };
+
+    // Se construye el payload con la estructura requerida.
+    // Si algún campo está vacío (cadena vacía), se evaluará como false y se enviará null.
+    const payload = {
+      username: formData.username || null,
+      password: formData.password || null,
+      login: false,
+      usuarioDetalle: {
+        id: initialData.usuarioDetalle.id, // ID existente del detalle del usuario
+        usersRoles: [{ id: 1 }],
+        allName: formData.fullName || null,
+        cip: formData.dni || null,
+        address: formData.direction || null,
+        phone: formData.phone || null,
+        email: formData.email || null,
+        dateOfBirth: formData.dateBorn || null,
+        bloodType: formData.bloodType || null,
+        emergencyContact: formData.emergencyContactName || null,
+        emergencyPhone: formData.emergencyContactPhone || null,
+        cargo: { id: formData.cargo ? cargoMapping[formData.cargo] : null },
+        photo: formData.profilePicture || null
+      },
+      authorities: null,
+      enabled: true,
+      accountNonLocked: true,
+      credentialsNonExpired: true,
+      accountNonExpired: true
+    };
+
+    try {
+      await updateUser(initialData.id, payload);
       toast({
-        title: "Usuario registrado",
-        description: "El usuario ha sido creado exitosamente"
+        title: "Usuario actualizado",
+        description: "El usuario ha sido actualizado exitosamente"
       });
       setTimeout(() => navigate("/Administrar/Usuarios"), 1000);
     } catch (error) {
@@ -98,19 +162,30 @@ export const AddUser = () => {
       className="w-full max-w-4xl mx-auto p-6 border border-zinc-700 rounded-md shadow-md mt-4 grid grid-cols-2 gap-6 bg-white"
     >
       <div className="p-4 w-full">
-        <h1 className="text-2xl font-bold mb-4">Agregar Usuario</h1>
+        <h1 className="text-2xl font-bold mb-4">Editar Usuario</h1>
         <h2 className="text-lg font-semibold mb-4">Información General</h2>
         <div className="flex flex-col items-center">
           <div className="pb-2 w-full">
-            <Label htmlFor="username">Nombre de Usuario*</Label>
+            <Label htmlFor="username">Nombre de Usuario</Label>
             <input
               id="username"
               type="text"
               name="username"
               value={formData.username}
               onChange={handleChange}
-              required
               placeholder="Nombre de Usuario"
+              className="border-b border-zinc-300 p-2 w-full outline-none"
+            />
+          </div>
+          <div className="pb-2 w-full">
+            <Label htmlFor="password">Contraseña (Nueva)</Label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Ingrese nueva contraseña"
               className="border-b border-zinc-300 p-2 w-full outline-none"
             />
           </div>
@@ -130,26 +205,24 @@ export const AddUser = () => {
         </div>
         <div className="grid gap-4 mt-4 w-full p-2">
           <div>
-            <Label htmlFor="fullName">Nombre Completo*</Label>
+            <Label htmlFor="fullName">Nombre Completo</Label>
             <input
               id="fullName"
               type="text"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              required
               placeholder="Nombre Completo"
               className="border-b border-zinc-300 p-2 w-full outline-none"
             />
           </div>
           <div>
-            <Label htmlFor="cargo">Cargo*</Label>
+            <Label htmlFor="cargo">Cargo</Label>
             <select
               id="cargo"
               name="cargo"
               value={formData.cargo}
               onChange={handleChange}
-              required
               className="border-b border-zinc-300 p-2 w-full outline-none"
             >
               <option value="">Seleccione un cargo</option>
@@ -160,26 +233,24 @@ export const AddUser = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="email">Correo Electrónico*</Label>
+              <Label htmlFor="email">Correo Electrónico</Label>
               <input
                 id="email"
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
                 placeholder="Correo Electrónico"
                 className="border-b border-zinc-300 p-2 w-full outline-none"
               />
             </div>
             <div>
-              <Label htmlFor="bloodType">Tipo de Sangre*</Label>
+              <Label htmlFor="bloodType">Tipo de Sangre</Label>
               <select
                 id="bloodType"
                 name="bloodType"
                 value={formData.bloodType}
                 onChange={handleChange}
-                required
                 className="border-b border-zinc-300 p-2 w-full outline-none"
               >
                 <option value="">Seleccione tipo</option>
@@ -196,27 +267,25 @@ export const AddUser = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="dni">Número de Documento*</Label>
+              <Label htmlFor="dni">Número de Documento</Label>
               <input
                 id="dni"
                 type="text"
                 name="dni"
                 value={formData.dni}
                 onChange={handleChange}
-                required
                 placeholder="Número de Documento"
                 className="border-b border-zinc-300 p-2 w-full outline-none"
               />
             </div>
             <div>
-              <Label htmlFor="dateToContract">Fecha de Contrato*</Label>
+              <Label htmlFor="dateToContract">Fecha de Contrato</Label>
               <input
                 id="dateToContract"
                 type="date"
                 name="dateToContract"
                 value={formData.dateToContract}
                 onChange={handleChange}
-                required
                 className="border-b border-zinc-300 p-2 w-full outline-none"
               />
             </div>
@@ -291,7 +360,7 @@ export const AddUser = () => {
           <div className="pt-20 flex space-x-4">
             <Button onClick={handleCancel}>Cancelar</Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Guardando..." : "Guardar"}
+              {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </Button>
           </div>
         </div>

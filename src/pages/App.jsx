@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 import {Home} from "./Home"
 import { LoginForm } from "./Login.jsx"
 import {EmployeProfile} from './EmployeProfile';
+import { AddUser } from './forms/AddEmploye';
 import {AddIncapacity} from "./forms/AddIncapacity";
 import {AddPermiso} from "./forms/AddPermiso";
 import {AddVacaciones} from "./forms/AddVacaciones";
@@ -17,6 +18,7 @@ import React, { useState, useEffect } from 'react';
 import { QueryAusencias } from "./consult/queryAusencias";
 import { QueryPermisos } from "./consult/queryPermisos";
 import { QueryVacations } from "./consult/queryVacations"; 
+import { EditUser } from './forms/EditUser';
 import { getUserInfoFromToken } from '@/lib/utils';
 import { useAdmin } from '../contexto/AdminContext';
 import {useApiGateway} from '../lib/useApiGateway';
@@ -63,10 +65,20 @@ function App() {
               element={isAuthenticated ? <Home  isAuthenticated={isAuthenticated} /> : <Navigate to="/login" replace />}
             />
 
-            {/* Ruta para agregar empleado */}
+            {/* Ruta para listar empleados */}
             <Route
               path="/Administrar/Usuarios"
               element={isAuthenticated ? <EmployeProfile /> : <Navigate to="/login" replace />}
+            />
+
+            <Route
+              path="/Administrar/Usuarios/add"
+              element={isAuthenticated ? <AddUser /> : <Navigate tAddUser="/login" replace />}
+            />
+
+            <Route
+              path="/Administrar/Usuarios/edit/:username"
+              element={isAuthenticated ? <EditUser /> : <Navigate to="/login" replace />}
             />
 
             {/* Ruta para agregar incapacidad */}
