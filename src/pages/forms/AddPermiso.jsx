@@ -5,50 +5,100 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast"
+import InputImage from "../../components/InputImage"
+import emailjs from 'emailjs-com';
+import { useNavigate } from 'react-router-dom';
+import { crearPermisos } from "@/lib/api_gateway";
+import { useAdmin } from '../../contexto/AdminContext';
+
 
 export const AddPermiso = () => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [reason, setReason] = useState("");
+  const navigate = useNavigate();
+   const { isAdmin, userData } = useAdmin(); // Ahora tenemos acceso al rol
+const [permisoForm, setPermisoForm] = useState({
+  fechaSolicitud: "",
+  fechaInicio: "",
+  fechaFin: "",
+  userDetalle: {
+      id: 0
+  },
+  reason: "",
+  status: "pendiente"
+  })
+    
   const { toast } = useToast();
   
-  const condicion = true
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    try {
+      const idUser = userData.id;
+      const d  = new Date();
+      const fechaSolicituds = d.toISOString().split('T')[0];
+
+      const updatedForm = {...permisoForm, userDetalle:{id:idUser}  , fechaSolicitud: fechaSolicituds }
+     
+      crearPermisos('api/v1/permiso/crear',updatedForm);
+      
+    // Send email
+    /*emailjs.send('service_uj98yaf', 'template_621nbjq', {
+      username: userData.name,
+      startDate: startDate,
+      endDate: endDate,
+      reason: reason,
+      email:"francisco.pulice@outlook.com"
+    }, '4xheq9QKA_POpAjFR')
+    .then((response) => {
+      console.log('Email sent successfully!', response.status, response.text);
+    }, (err) => {
+      console.error('Failed to send email. Error: ', err);
+    });*/
+
     
-    if (condicion){
       toast({
         variant: "success",
-        title: "Solicitud enviada",
+        title: "Permiso completado",
         description: "Debe esperar que sea aprobada por el administrador."
       });
-      console.log(startDate + " ," + endDate + ", " + " razon: "+ reason);
-    setStartDate("");
-    setEndDate("");
-    setReason("");
-    }else{
+
+    
+      navigate('/home');
+
+      
+    } catch (error) {
+      console.log(error)
       toast({
         variant: "destructive",
         title: "Oh.. ocurrio un error",
         description: "Debe ponerse en contacto con el administrador."
       });
     }
-   
+  };
 
-    
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setPermisoForm({ ...permisoForm, [name]: value });
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
+    <>
+    
+    <div className="w-full max-w-2xl xl:max-h-[550px] 2xl:max-h-[750px] mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
+    <div className="font-bold text-xl flex justify-center ">
+        <h1>Solicitud de Permiso</h1>
+    </div>
     <form onSubmit={handleSubmit} className="items-center space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="startDate">Desde</Label>
+        <Label htmlFor="startDate">Fecha de Inicio</Label>
         <div className="relative">
           <Input
+            name="fechaInicio"
             id="startDate"
             type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            value={permisoForm.fechaInicio}
+            onChange={handleChange}
             required
             className="pl-10"
           />
@@ -57,13 +107,14 @@ export const AddPermiso = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="endDate">Hasta</Label>
+        <Label htmlFor="endDate">Fecha de Finalización</Label>
         <div className="relative">
           <Input
+            name="fechaFin"
             id="endDate"
             type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            value={permisoForm.fechaFin}
+            onChange={handleChange}
             required
             className="pl-10"
           />
@@ -74,20 +125,28 @@ export const AddPermiso = () => {
       <div className="space-y-2">
         <Label htmlFor="reason">Razón</Label>
         <Textarea
+          name="reason"
           id="reason"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
           required
-          className="min-h-[200px] sm:min-h-[250px] md:min-h-[250px] lg:min-h-[250px] xl:min-h-[250px] 2xl:min-h-[500px]"
-          placeholder="Porfavor agregue los detalles de su permiso..."
+          value={permisoForm.reason}
+          onChange={handleChange}
+          className=" resize-none min-h-[100px] sm:min-h-[250px] md:min-h-[250px] lg:min-h-[250px] xl:min-h-[150px] 2xl:min-h-[300px]"
+          placeholder="Porfavor ingrese los detalles acerca de su ausencia..."
         />
       </div>
+      <div>
 
-      <Button type="submit" className="w-full">
-        Enviar Solicitud
-      </Button>
+   
+        <Button disabled={permisoForm.reason.length < 10} type="submit" className="w-full">
+          Enviar Solicitud
+        </Button>
+    
+      
+      </div>     
+      
     </form>
     </div>
+  </>
   )
 }
 

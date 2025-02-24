@@ -10,23 +10,23 @@ export function LoginForm({ setIsAuthenticated }) {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     
+    console.log("lOGIN")
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
 
         const data = await signIn('login', username, password);
+
+        if(data){
+            setIsAuthenticated(true);
+            navigate('/home');
+        }else{
+            console.log("Error al iniciar sesion");
+            alert("Error al iniciar Sesion");
+        }
+
         
-        if (data.token) {
-        localStorage.setItem('token', data.token); // Store token in localStorage
-        }
-
-        if(data.username){
-            localStorage.setItem('username',data.username)
-        }
-
-        setIsAuthenticated(true);
-        navigate('/home');
         } catch (error) {
             console.error('Error al conectar con la API: BOTON DE INICIO DE SESION', error);
         }

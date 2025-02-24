@@ -7,7 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ChevronDown} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -29,23 +29,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-import { modificarPermisos } from "../../../lib/api_gateway";
 import { useEffect, useState } from "react"
 
 
- 
+export function DataTableVacaciones({vacationsData, isAdmin}) {
+ const [data, setData] = useState([]);
 
-
-export function DataTablePermisos({userData, isAdmin}) {
-  //definir aqui un useState para poder eliminar del array elementos al ejecutar la funcion handleRechazar. y hacer la respuesta optimista. 
-  const [data, setData] = useState([]);
-  React.useEffect(() => {
-    if (userData?.length) {
-      setData(userData);
+ React.useEffect(() => {
+    if (vacationsData?.length) {
+      setData(vacationsData);
     }
-  }, [userData]);
-  
+  }, [vacationsData]);
+
   const handleAprobar = (id) => {
     setData((prevData) => prevData.filter((item) => item.id !== id));
     alert("Aprobada")
@@ -55,8 +50,8 @@ export function DataTablePermisos({userData, isAdmin}) {
     setData((prevData) => prevData.filter((item) => item.id !== id));
     alert("Rechazada");
   };
-  
-  const columns= [
+
+const columns= [
     {
       id: "select",
       header: ({ table }) => (
@@ -159,7 +154,9 @@ export function DataTablePermisos({userData, isAdmin}) {
   ]
 
   const [sorting, setSorting] = React.useState([])
-  const [columnFilters, setColumnFilters] = React.useState([])
+  const [columnFilters, setColumnFilters] = React.useState(
+    []
+  )
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 

@@ -5,56 +5,68 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast"
-import { Toaster } from "@/components/ui/toaster"
 import InputImage from "../../components/InputImage"
 import emailjs from 'emailjs-com';
 import { useNavigate } from 'react-router-dom';
+import {useApiGateway} from '../../lib/useApiGateway'
+import { crearAsistencia, crearIncapacidad } from "@/lib/api_gateway";
+import { useAdmin } from '../../contexto/AdminContext';
 
-
-
-export const AddIncapacity =({username})=> {
+export const AddIncapacity =()=> {
  const navigate = useNavigate();
+const { isAdmin, userData } = useAdmin(); // Ahora tenemos acceso al rol
+ const [asistenciaForm, setAsistenciaForm] = useState({
+    fechaInicio:"",
+    fechaFin:"",
+    reason:"",
+    userDetalleId: 0,
+    tipo:"ausencia",
+    status:"pendiente",
+    fechaSolicitud:"",
+    certified:""
+  })
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [reason, setReason] = useState("");
 
   const { toast } = useToast();
-  const condicion = true
-
+ 
   const handleSubmit = (e) => {
-
     e.preventDefault();
-    
-    if (condicion){
-      toast({
-        variant: "success",
-        title: "Solicitud enviada",
-        description: "Debe esperar que sea aprobada por el administrador."
-      });
-      console.log(startDate + " ," + endDate + ", " + " razon: "+ reason);
+    try {
+      const idUser = userData.id;
+      const d  = new Date();
+      const fechaSolicituds = d.toISOString().split('T')[0];
 
+      const updatedForm = {...asistenciaForm, userDetalleId: idUser , fechaSolicitud: fechaSolicituds }
+     console.log(updatedForm);
+      crearAsistencia('api/v1/ausencias/crear',updatedForm);
+      
     // Send email
-    emailjs.send('service_uj98yaf', 'template_621nbjq', {
-      username: username,
+    /*emailjs.send('service_uj98yaf', 'template_621nbjq', {
+      username: userData.name,
       startDate: startDate,
       endDate: endDate,
       reason: reason,
       email:"francisco.pulice@outlook.com"
     }, '4xheq9QKA_POpAjFR')
-
     .then((response) => {
       console.log('Email sent successfully!', response.status, response.text);
     }, (err) => {
       console.error('Failed to send email. Error: ', err);
-    });
+    });*/
 
+    
+      toast({
+        variant: "success",
+        title: "Asistencia completada",
+        description: "Debe esperar que sea aprobada por el administrador."
+      });
 
-    setStartDate("");
-    setEndDate("");
-    setReason("");
-    navigate('/Gestionar/Asistencia/Consultar');
-    }else{
+    
+      navigate('/Gestionar/Asistencia/Consultar');
+
+      
+    } catch (error) {
+      console.log(error)
       toast({
         variant: "destructive",
         title: "Oh.. ocurrio un error",
@@ -63,20 +75,29 @@ export const AddIncapacity =({username})=> {
     }
   };
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setAsistenciaForm({ ...asistenciaForm, [name]: value });
+  };
+
   return (
     <>
     
       <div className="w-full max-w-2xl xl:max-h-[550px] 2xl:max-h-[750px] mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
-    
+       <div className="font-bold text-xl flex justify-center ">
+        <h1>Formulario de Incapacidad</h1>
+       </div>
       <form onSubmit={handleSubmit} className="items-center space-y-6">
         <div className="space-y-2">
           <Label htmlFor="startDate">Fecha de Inicio</Label>
           <div className="relative">
             <Input
               id="startDate"
+              name="fechaInicio"
               type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              
+              value={asistenciaForm.fechaInicio}
+              onChange={handleChange}
               required
               className="pl-10"
             />
@@ -88,10 +109,11 @@ export const AddIncapacity =({username})=> {
           <Label htmlFor="endDate">Fecha de Finalización</Label>
           <div className="relative">
             <Input
+              name="fechaFin"
               id="endDate"
               type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              value={asistenciaForm.fechaFin}
+              onChange={handleChange}
               required
               className="pl-10"
             />
@@ -100,16 +122,17 @@ export const AddIncapacity =({username})=> {
         </div>
 
         <div className="flex">
-          <InputImage/>
+          <InputImage formData={asistenciaForm} setFormData={setAsistenciaForm}/>
         </div>
   
         <div className="space-y-2">
           <Label htmlFor="reason">Razón</Label>
           <Textarea
+            name="reason"
             id="reason"
             required
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
+            value={asistenciaForm.reason}
+            onChange={handleChange}
             className=" resize-none min-h-[100px] sm:min-h-[250px] md:min-h-[250px] lg:min-h-[250px] xl:min-h-[150px] 2xl:min-h-[300px]"
             placeholder="Porfavor ingrese los detalles acerca de su ausencia..."
           />
@@ -117,7 +140,7 @@ export const AddIncapacity =({username})=> {
         <div>
 
      
-          <Button disabled={reason.length < 10} type="submit" className="w-full">
+          <Button disabled={asistenciaForm.reason.length < 10} type="submit" className="w-full">
             Enviar Solicitud
           </Button>
       

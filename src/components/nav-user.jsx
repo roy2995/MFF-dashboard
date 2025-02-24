@@ -37,7 +37,6 @@ export function NavUser({
   const { isMobile } = useSidebar()
   const handleLogout = () => {
     localStorage.removeItem('token'); // Eliminar token de localStorage
-    localStorage.removeItem('username'); // Eliminar token de localStorage
     setIsAuthenticated(false); // Cuando el usuario cierra sesión
     navigate('/login');
   };

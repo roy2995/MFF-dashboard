@@ -9,6 +9,7 @@ export const useApiGateway = (fn) => {
         try {
           const res = await fn();
           setData(res);
+          console.log(data);
         } catch (error) {
           console.log(error)
           
@@ -18,6 +19,7 @@ export const useApiGateway = (fn) => {
       };
 
       useEffect(() => {
+        console.log("useEffect useapigateway")
         fetchData();
       }, []);
 

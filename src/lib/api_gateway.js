@@ -96,6 +96,7 @@ export const fetchOneUser = async (path) => {
      // Filter the return to match the desired structure
      const filteredData = {
         name: data.username,
+        id: data.usuarioDetalle.id,
         roleId:  data.usuarioDetalle.usersRoles[0].id,
         cargo: data.usuarioDetalle.cargo.cargo,
         photo: data.usuarioDetalle.photo,
@@ -109,6 +110,47 @@ export const fetchOneUser = async (path) => {
 
 
 //-----------------------------------------------------------Asistencias-------------------------------------------------------------------//
+
+//funcion para consultar asistencias, tardanzas e incapacidades
+export const consultarEstadosUsuario = async (path) => {
+    
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 50000);
+
+        const response = await fetch(`${api_url}/${path}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            throw new Error('Sesión expirada');
+        }
+        if (response.status === 403){
+            throw new Error('Error 403');
+        }
+        
+        if (!response.ok) throw new Error('Error al obtener usuarios');
+        
+        return await response.json();
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Tiempo de espera agotado');
+        }
+        throw error;
+    }
+
+}
+
 //funcion para consultar asistencias
 export const consultarAusencias = async (path) => {
     const token = localStorage.getItem('token');
@@ -149,10 +191,52 @@ export const consultarAusencias = async (path) => {
 }
 
 //funcion para crear asistencias
-export const crearAusencias = async (path, data) => {
+export const crearAsistencia = async (path, data) => {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('Acceso no autorizado');
- 
+    console.log(data)
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 50000);
+
+        const response = await fetch(`${api_url}/${path}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data),
+            signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            throw new Error('Sesión expirada');
+        }
+        if (response.status === 403){
+            throw new Error('Error en el body');
+        }
+        
+        if (!response.ok) throw new Error('Error al obtener usuarios');
+        
+        return await response.json();
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Tiempo de espera agotado');
+        }
+        throw error;
+    }
+}
+
+
+//funcion para crear tardanza
+//funcion para crear asistencias
+export const crearTardanza = async (path, data) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+    console.log(data)
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 50000);
@@ -269,6 +353,57 @@ export const modificarAusencias = async (path,data) => {
 
 
 //-----------------------------------------------------------Permisos-------------------------------------------------------------------//
+
+//consultar todos los permisos
+export const getAllPermisos = async (path) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 50000);
+
+        const response = await fetch(`${api_url}/${path}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            throw new Error('Sesión expirada');
+        }
+        if (response.status === 403){
+            throw new Error('Error en el body');
+        }
+        
+        if (!response.ok) throw new Error('Error al obtener permisos de todos los usuarios');
+        const jsonResponse = await response.json();
+
+        // Mapear la respuesta al formato deseado
+        const data = jsonResponse.map(permiso => ({
+                status: permiso.status,
+                id: permiso.id.toString(),
+                fecha: `${new Date(permiso.fechaInicio).toLocaleDateString()} - ${new Date(permiso.fechaFin).toLocaleDateString()}`,
+                nombre: permiso.userDetalle?.allName || 'Desconocido',
+                email: permiso.userDetalle?.email || 'Sin correo',
+                descripcion: permiso.reason || 'Sin descripción'
+        }));
+        return data;
+        
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Tiempo de espera agotado');
+        }
+        throw error;
+    }
+
+}
 //funcion para consultar permisos
 export const consultarPermisos = async (path) => {
     const token = localStorage.getItem('token');
@@ -316,7 +451,8 @@ export const crearPermisos = async (path, data) => {
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 50000);
-
+ 
+        console.log(data)
         const response = await fetch(`${api_url}/${path}`, {
             method: 'POST',
             headers: {
@@ -337,7 +473,49 @@ export const crearPermisos = async (path, data) => {
             throw new Error('Error en el body');
         }
         
-        if (!response.ok) throw new Error('Error al obtener usuarios');
+        if (!response.ok) throw new Error('Error al crear permiso');
+        
+        return await response.json();
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Tiempo de espera agotado');
+        }
+        throw error;
+    }
+}
+
+
+//funcion para consultar permisos
+export const crearIncapacidad = async (path, data) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+ 
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 50000);
+ 
+        console.log(data)
+        const response = await fetch(`${api_url}/${path}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data),
+            signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            throw new Error('Sesión expirada');
+        }
+        if (response.status === 403){
+            throw new Error('Error en el body');
+        }
+        
+        if (!response.ok) throw new Error('Error al crear permiso');
         
         return await response.json();
     } catch (error) {
@@ -428,6 +606,56 @@ export const modificarPermisos = async (path,data) => {
 }
 
 //-----------------------------------------------------------Vacaciones-------------------------------------------------------------------//
+
+//obtener todas las vacaciones
+export const getAllVacations = async (path) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Acceso no autorizado');
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 50000);
+
+        const response = await fetch(`${api_url}/${path}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            throw new Error('Sesión expirada');
+        }
+        if (response.status === 403){
+            throw new Error('Error en el body');
+        }
+        
+        if (!response.ok) throw new Error('Error al obtener permisos de todos los usuarios');
+        const jsonResponse = await response.json();
+
+        // Mapear la respuesta al formato deseado
+        const data = jsonResponse.map(vacations => ({
+                status: vacations.status,
+                id: vacations.id.toString(),
+                fecha: `${new Date(vacations.fechaInicio).toLocaleDateString()} - ${new Date(vacations.fechaFin).toLocaleDateString()}`,
+                nombre: vacations.userDetalle?.allName || 'Desconocido',
+                email: vacations.userDetalle?.email || 'Sin correo',
+                descripcion: vacations.reason || 'Sin descripción'
+        }));
+        return data;
+        
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            throw new Error('Tiempo de espera agotado');
+        }
+        throw error;
+    }
+}
 
 //funcion para consultar Vacaciones
 export const consultarVacations = async (path) => {

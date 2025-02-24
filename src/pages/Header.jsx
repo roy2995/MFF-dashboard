@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings ,BellRing} from "lucide-react"
+import { Calendar, Settings ,BellRing} from "lucide-react"
 import { useLocation } from "react-router-dom"
 
 import {
@@ -17,7 +17,7 @@ const Header = ({notificationCount=10}) => {
   // The pathname is available in location.pathname
   const pathname = location.pathname;
   const pathSegments = pathname.split('/')
-  const thisPage = pathSegments[pathSegments.length-1]
+  const thisPage = pathSegments[pathSegments.length-2]
   return (
     <>
     <div className="flex items-center justify-between px-3 bg-slate-100 w-full h-16">

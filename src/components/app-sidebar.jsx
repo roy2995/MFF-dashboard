@@ -19,22 +19,28 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import {useApiGateway} from '../lib/useApiGateway';
-import { fetchOneUser } from "@/lib/api_gateway";
+
 import { useAdmin } from '../contexto/AdminContext';
 
 
 // This is sample data.
 
 
-export function AppSidebar({setIsAuthenticated, posts, ...props }) {
-const { isAdmin } = useAdmin(); // Ahora tenemos acceso al rol
+export function AppSidebar({setIsAuthenticated, refetch,...props }) {
+const { isAdmin, userData } = useAdmin(); // Ahora tenemos acceso al rol
 //const { data: posts } = useApiGateway(() => fetchOneUser(`api/v1/users/username/${user}`));
 console.log("appsidebar: is admin"+isAdmin)
+console.log("userData: " + userData)
 
 
 
 let data = {}
+
+useEffect(() => {
+  console.log("UseEFFECT APPSIDEBVAR")
+
+  
+}, [])
 
 
 if (isAdmin){
@@ -43,7 +49,7 @@ data = { navMain: [
     title: "Administrar",
     url: "#",
     icon: CircleUserRound,
-    isActive: true,
+    isActive: false,
     items: [
       {
         title: "Usuarios",
@@ -142,15 +148,15 @@ data = { navMain: [
       items: [
         {
           title: "Asistencia",
-          url: "/Gestionar/Asistencia/Registrar",
+          url: "/Gestionar/Asistencia/Consultar",
         },
         {
           title: "Permisos",
-          url: "/Gestionar/Permisos/Registrar",
+          url: "/Gestionar/Permisos/Consultar",
         },
         {
           title: "Vacaciones",
-          url: "/Gestionar/Vacaciones/Registrar",
+          url: "/Gestionar/Vacaciones/Consultar",
         },
       ],
     },
@@ -219,7 +225,7 @@ data = { navMain: [
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser dataUser={posts} setIsAuthenticated={setIsAuthenticated}  />
+        <NavUser dataUser={userData} setIsAuthenticated={setIsAuthenticated}  />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
