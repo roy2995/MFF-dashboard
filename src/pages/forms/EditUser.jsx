@@ -165,16 +165,15 @@ export const EditUser = () => {
         <h1 className="text-2xl font-bold mb-4">Editar Usuario</h1>
         <h2 className="text-lg font-semibold mb-4">Información General</h2>
         <div className="flex flex-col items-center">
-          <div className="pb-2 w-full">
+        <div className="pb-2 w-full">
             <Label htmlFor="username">Nombre de Usuario</Label>
             <input
               id="username"
               type="text"
               name="username"
               value={formData.username}
-              onChange={handleChange}
-              placeholder="Nombre de Usuario"
-              className="border-b border-zinc-300 p-2 w-full outline-none"
+              disabled
+              className="border-b border-zinc-300 p-2 w-full outline-none bg-gray-200 cursor-not-allowed"
             />
           </div>
           <div className="pb-2 w-full">
