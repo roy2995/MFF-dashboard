@@ -44,7 +44,7 @@ export const AddUser = () => {
       reader.readAsDataURL(file);
     } else {
       setPreviewImage(null);
-      setFormData((prev) => ({ ...prev, profilePicture: "" }));
+      setFormData((prev) => ({ ...prev, profilePicture: "https://cloud.appwrite.io/v1/storage/buckets/676d71980009ac206dec/files/67be4365003d34755b79/view?project=676aee78003e6294db8c&mode=admin" }));
     }
   };
 
@@ -77,6 +77,7 @@ export const AddUser = () => {
       console.log("Payload a enviar:", payload);
       await createUser(payload);
       toast({
+        variant: "success",
         title: "Usuario registrado",
         description: "El usuario ha sido creado exitosamente"
       });
@@ -126,7 +127,7 @@ export const AddUser = () => {
               </div>
             )}
           </label>
-          <input id="imageUpload" type="file" onChange={handleImageChange} className="hidden" />
+          <input id="imageUpload" type="text" onChange={handleImageChange} className="hidden" />
         </div>
         <div className="grid gap-4 mt-4 w-full p-2">
           <div>
@@ -248,7 +249,7 @@ export const AddUser = () => {
                 name="dateBorn"
                 value={formData.dateBorn}
                 onChange={handleChange}
-                className="border-b border-zinc-400 p-2 w-full outline-none bg-transparent text-white"
+                className="border-b border-zinc-400 p-2 w-full outline-none bg-transparent text-black appearance-none bg-white"
               />
             </div>
             <div>

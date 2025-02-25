@@ -6,7 +6,7 @@ export function Mfflogo() {
   return (
     <div className='flex items-center justify-center'>
                 
-                     <div className="flex aspect-square size-8  rounded-lg bg-sidebar-primary mr-2">
+                     <div className="flex aspect-square size-12  rounded-lg bg-sidebar-primary mr-2">
                      <img  src={logo} alt=""  />
                      </div>
                      
