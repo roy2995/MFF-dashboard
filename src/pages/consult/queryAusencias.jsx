@@ -48,12 +48,10 @@ export const QueryAusencias = () => {
   
     // Función reutilizable para cargar los datos
     const fetchData = async () => {
-      console.log("Console log para userData fetchdata"+userData)
       if (userData && userData.name) {
         const path = `api/v1/ausencias/contar/username/${userData.name}`;
         try {
           const estadosUser = await consultarEstadosUsuario(path);
-          console.log("Estados actualizados: ", estadosUser);
           setData(estadosUser);
         } catch (error) {
           console.error("Error fetching estadosUser:", error);

@@ -63,7 +63,7 @@ const [permisoForm, setPermisoForm] = useState({
       });
 
     
-      navigate('/home');
+      navigate('/');
 
       
     } catch (error) {

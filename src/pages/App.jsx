@@ -32,9 +32,7 @@ function App() {
 
   //const { data: userData, refetch } = useApiGateway(() => fetchOneUser(`api/v1/users/username/${username.username}`));
 
-  console.log(username)
-  console.log('is auth?: ' + isAuthenticated)
-  console.log('is Admin?'  + isAdmin)
+ 
 
 
  //ejecutar este comando solamente cuando pase 1 hora evitando que se ejecute cuando se refresca la pagina
@@ -76,7 +74,6 @@ function App() {
    
     <Router>
     <Toaster />
-    <SidebarProvider>
       {isAuthenticated && <AppSidebar setIsAuthenticated={setIsAuthenticated}   />}
       <div className="flex flex-col w-full">
         {isAuthenticated && (
@@ -89,13 +86,13 @@ function App() {
             {/* Ruta raíz que redirige según el estado de autenticación */}
             <Route
               path="/"
-              element={<Navigate to={isAuthenticated ? "/home" : "/login"} replace={false} />}
+              element={<Navigate to={isAuthenticated ? "/Gestionar/Asistencia/Consultar" : "/login"} replace={false} />}
             />
 
             {/* Ruta para el login */}
             <Route
               path="/login"
-              element={!isAuthenticated ? <LoginForm setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/home" replace />}
+              element={!isAuthenticated ? <LoginForm setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/Gestionar/Asistencia/Consultar" replace />}
             />
 
             {/* Ruta para el home */}
@@ -173,7 +170,7 @@ function App() {
           </Routes>
         </main>
       </div>
-    </SidebarProvider>
+    
   </Router>
   )
 }

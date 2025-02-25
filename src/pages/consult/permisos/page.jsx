@@ -23,10 +23,12 @@ export default  function DemoPagePermisos({isAdmin , userData} ) {
  
              try {
                const estadosUser = await getAllPermisos(path);
-               console.log("Estados actualizados: ", estadosUser);
-               setAllPermisos(estadosUser);
+               console.log("todos los permisos ", estadosUser);
+               // Filtrar los permisos con status "pendiente"
+               const permisosPendientes = isAdmin ? estadosUser.filter(permiso => permiso.status === "pendiente") : estadosUser;
+               setAllPermisos(permisosPendientes);
              } catch (error) {
-               console.error("Error fetching estadosUser:", error);
+               console.error("Error fetching permisos:", error);
              }
            }
          };

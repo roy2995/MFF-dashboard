@@ -29,27 +29,62 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { modificarVacations } from "../../../lib/api_gateway";
 import { useEffect, useState } from "react"
 
 
 export function DataTableVacaciones({vacationsData, isAdmin}) {
  const [data, setData] = useState([]);
 
- React.useEffect(() => {
+ useEffect(() => {
     if (vacationsData?.length) {
       setData(vacationsData);
     }
   }, [vacationsData]);
 
-  const handleAprobar = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    alert("Aprobada")
-  }
+   const handleAprobar = async (original) => {
+    console.log(original)
+     const id = original.id;
+     setData((prevData) => prevData.filter((item) => item.id !== id));
+ 
+     const permisoForm = {
+       "id": original.id,
+       "fechaInicio":original.fechaInicio,
+       "fechaFin":original.fechaFin,
+       "userDetalle":{
+           "id": original.userId
+       },
+       "reason": original.descripcion,
+       "status": "aprobado"
+   } 
+   console.log("aprobar vacaciones form")
+    console.log(permisoForm)
+     await modificarVacations('api/v1/vacaciones/modificar',permisoForm);
+    
+   }
 
-  const handleRechazar = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    alert("Rechazada");
-  };
+   
+
+ 
+   const handleRechazar = async (original) => {
+     const id = original.id;
+     setData((prevData) => prevData.filter((item) => item.id !== id));
+ 
+     const permisoForm = {
+       "id": original.id,
+       "fechaInicio":original.fechaInicio,
+       "fechaFin":original.fechaFin,
+       "userDetalle":{
+           "id": original.userId
+       },
+       "reason": original.descripcion,
+       "status": "rechazado"
+   } 
+ 
+   
+     await modificarVacations('api/v1/vacaciones/modificar',permisoForm)
+     
+   };
 
 const columns= [
     {
@@ -140,10 +175,10 @@ const columns= [
         return (
           <>
           {isAdmin ? (<div className="flex flex-row gap-4">
-            <Button  className="bg-green-600 h-8 w-20 p-0" onClick= {() => handleAprobar(row.original.id)}>
+            <Button  className="bg-green-600 h-8 w-20 p-0" onClick= {() => handleAprobar(row.original)}>
                   <span className="">APROBAR</span>
             </Button>
-            <Button  className=" bg-red-600 h-8 w-20 p-0" onClick= {() => handleRechazar(row.original.id)}>
+            <Button  className=" bg-red-600 h-8 w-20 p-0" onClick= {() => handleRechazar(row.original)}>
                   <span className="">RECHAZAR</span>
             </Button>
           </div> ) : (<></>)}

@@ -23,10 +23,12 @@ export default  function DemoPageVacaciones({isAdmin, userData}) {
 
             try {
               const estadosUser = await getAllVacations(path);
-              console.log("Estados actualizados: ", estadosUser);
-              setAllVacations(estadosUser);
+              console.log( estadosUser);
+              // Filtrar los permisos con status "pendiente"
+              const vacacionesPendientes = isAdmin ? estadosUser.filter(vacations => vacations.status === "pendiente") : estadosUser;
+              setAllVacations(vacacionesPendientes);
             } catch (error) {
-              console.error("Error fetching estadosUser:", error);
+              console.error("Error fetching vacaciones:", error);
             }
           }
         };

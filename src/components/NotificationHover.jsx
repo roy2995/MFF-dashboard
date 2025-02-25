@@ -13,7 +13,7 @@ const NotificationHover = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 10 }).map((_, index) => (
+            {Array.from({ length: 1 }).map((_, index) => (
               <tr key={index}>
                 <td className="border-b py-2">
                   <div className="mb-2">

@@ -40,20 +40,52 @@ import { useEffect, useState } from "react"
 export function DataTablePermisos({userData, isAdmin}) {
   //definir aqui un useState para poder eliminar del array elementos al ejecutar la funcion handleRechazar. y hacer la respuesta optimista. 
   const [data, setData] = useState([]);
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (userData?.length) {
       setData(userData);
+      
     }
   }, [userData]);
   
-  const handleAprobar = (id) => {
+  const handleAprobar = async (original) => {
+    const id = original.id;
     setData((prevData) => prevData.filter((item) => item.id !== id));
-    alert("Aprobada")
+
+    const permisoForm = {
+      "id": original.id,
+      "fechaInicio":original.fechaInicio,
+      "fechaFin":original.fechaFin,
+      "userDetalle":{
+          "id": original.userId
+      },
+      "reason": original.descripcion,
+      "status": "aprobado"
+  } 
+
+  
+    await modificarPermisos('api/v1/permiso/modificar',permisoForm);
+   
   }
 
-  const handleRechazar = (id) => {
+  const handleRechazar = async (original) => {
+    const id = original.id;
     setData((prevData) => prevData.filter((item) => item.id !== id));
-    alert("Rechazada");
+
+    const permisoForm = {
+      "id": original.id,
+      "fechaInicio":original.fechaInicio,
+      "fechaFin":original.fechaFin,
+      "userDetalle":{
+          "id": original.userId
+      },
+      "reason": original.descripcion,
+      "status": "rechazado"
+  } 
+
+  
+    await modificarPermisos('api/v1/permiso/modificar',permisoForm)
+    
   };
   
   const columns= [
@@ -140,15 +172,14 @@ export function DataTablePermisos({userData, isAdmin}) {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const celda = row.id
-        
+        const celda = row
         return (
           <>
           {isAdmin ? (<div className="flex flex-row gap-4">
-            <Button  className="bg-green-600 h-8 w-20 p-0" onClick= {() => handleAprobar(row.original.id)}>
+            <Button  className="bg-green-600 h-8 w-20 p-0" onClick= {() => handleAprobar(row.original)}>
                   <span className="">APROBAR</span>
             </Button>
-            <Button  className=" bg-red-600 h-8 w-20 p-0" onClick= {() => handleRechazar(row.original.id)}>
+            <Button  className=" bg-red-600 h-8 w-20 p-0" onClick= {() => handleRechazar(row.original)}>
                   <span className="">RECHAZAR</span>
             </Button>
           </div> ) : (<></>)}

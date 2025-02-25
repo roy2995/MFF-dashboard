@@ -13,7 +13,7 @@ export const QueryPermisos = () => {
   }
   return (
 <>
-      <div className="w-full mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
+      <div className="max-w-[950px] 2xl:max-w-full mx-auto p-6 border border-gray-300 rounded-md shadow-md mt-4">
         <div className='flex justify-between'>
         <h1 className="font-bold text-xl">Gestión De Permisos</h1>
         <button

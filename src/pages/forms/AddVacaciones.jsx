@@ -57,7 +57,7 @@ export const AddVacaciones = () => {
        });
  
      
-       navigate('/home');
+       navigate('/');
  
        
      } catch (error) {

@@ -390,7 +390,10 @@ export const getAllPermisos = async (path) => {
                 status: permiso.status,
                 id: permiso.id.toString(),
                 fecha: `${new Date(permiso.fechaInicio).toLocaleDateString()} - ${new Date(permiso.fechaFin).toLocaleDateString()}`,
+                fechaInicio: permiso.fechaInicio,
+                fechaFin: permiso.fechaFin,
                 nombre: permiso.userDetalle?.allName || 'Desconocido',
+                userId: permiso.userDetalle?.id,
                 email: permiso.userDetalle?.email || 'Sin correo',
                 descripcion: permiso.reason || 'Sin descripción'
         }));
@@ -565,7 +568,7 @@ export const eliminarPermisos = async (path) => {
     }
 }
 
-//funcion para consultar permisos
+//funcion para modificar permisos
 export const modificarPermisos = async (path,data) => {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('Acceso no autorizado');
@@ -643,6 +646,9 @@ export const getAllVacations = async (path) => {
                 status: vacations.status,
                 id: vacations.id.toString(),
                 fecha: `${new Date(vacations.fechaInicio).toLocaleDateString()} - ${new Date(vacations.fechaFin).toLocaleDateString()}`,
+                fechaInicio: vacations.fechaInicio,
+                fechaFin: vacations.fechaFin,
+                userId: vacations.userDetalle?.id,
                 nombre: vacations.userDetalle?.allName || 'Desconocido',
                 email: vacations.userDetalle?.email || 'Sin correo',
                 descripcion: vacations.reason || 'Sin descripción'

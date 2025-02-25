@@ -7,6 +7,8 @@ import {
   PieChart,
   Settings2,
   CircleUserRound,
+  Plus,
+  ChevronsUpDown
 } from "lucide-react"
 
 import {
@@ -21,30 +23,24 @@ import {
 } from "@/components/ui/sidebar"
 
 import { useAdmin } from '../contexto/AdminContext';
-
-
+import { Mfflogo } from './Mfflogo'
 // This is sample data.
 
 
 export function AppSidebar({setIsAuthenticated, refetch,...props }) {
 const { isAdmin, userData } = useAdmin(); // Ahora tenemos acceso al rol
-//const { data: posts } = useApiGateway(() => fetchOneUser(`api/v1/users/username/${user}`));
-console.log("appsidebar: is admin"+isAdmin)
-console.log("userData: " + userData)
-
-
-
+ 
 let data = {}
-
+console.log("Appsidebar")
 useEffect(() => {
-  console.log("UseEFFECT APPSIDEBVAR")
-
-  
+    console.log("Appsidebar Dentro de UseEffect")
 }, [])
 
 
 if (isAdmin){
-data = { navMain: [
+data = { 
+  logo: "../assets/react.svg",
+  navMain: [
   {
     title: "Administrar",
     url: "#",
@@ -120,7 +116,9 @@ data = { navMain: [
   },
 ]}
 }else{
-  data = { navMain: [
+  data = { 
+    logo: "../assets/mfflogo.png",
+    navMain: [
     {
       title: "Gestionar",
       url: "#",
@@ -181,25 +179,7 @@ data = { navMain: [
     
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-       
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild isActive>
-              
-              
-              <Link to="/home">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                      <img src="mfflogo.png" alt=""/>
-                  </div>
-                    <div className="flex flex-col gap-0.5 leading-none">
-                      <span className="font-semibold">Money Free Flex Gestión</span>
-                      <span className="">v1.0.0</span>
-                    </div>
-              </Link>
-              
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+          <Mfflogo />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} isAdmin={isAdmin}/>

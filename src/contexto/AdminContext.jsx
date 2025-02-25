@@ -14,7 +14,7 @@ export const AdminProvider = ({ children }) => {
  
 
   useEffect(() => {
-    console.log("AdminContext");
+    
 
     // Define una función async dentro de useEffect
     const fetchData = async () => {
@@ -24,7 +24,7 @@ export const AdminProvider = ({ children }) => {
         try {
           const userDatas = await fetchOneUser(`api/v1/users/username/${roleName.username}`);
           setUserData(userDatas);
-          console.log("Es admin? codigo: " + roleName.roleId);
+          
           setIsAdmin(roleName.roleId === 1); // Compara con "2" para verificar si es admin
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -57,7 +57,7 @@ const signIn = async (path, username, password) => {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       const roleName = getUserInfoFromToken(data.token);
-      console.log("sigIn roleId = "+roleName.roleId)
+      
       setIsAdmin(roleName.roleId === 1);
       const userDatas = await fetchOneUser(`api/v1/users/username/${roleName.username}`);
       setUserData(userDatas)
