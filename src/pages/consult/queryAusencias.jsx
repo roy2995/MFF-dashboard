@@ -27,8 +27,13 @@ export const QueryAusencias = () => {
   const [isMarked, setIsMarked] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // State to control dialog
   const { isAdmin, userData } = useAdmin(); // Ahora tenemos acceso al rol
-  const [ data, setData] = useState([])
+  const [ data, setData] = useState({
+    "asistencia": 0,
+    "tardanza": 0,
+    "ausencia": 0
+})
   const [isLate, setIsLate] = useState(false);
+
   const [asistenciaForm, setAsistenciaForm] = useState({
     tipo:"asistencia",
     status:"asistencia",

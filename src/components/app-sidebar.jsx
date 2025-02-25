@@ -122,26 +122,6 @@ data = { navMain: [
 }else{
   data = { navMain: [
     {
-      title: "Administrar",
-      url: "#",
-      icon: CircleUserRound,
-      isActive: true,
-      items: [
-        {
-          title: "Usuarios",
-          url: "/Administrar/Usuarios"   
-        },
-        {
-          title: "Proveedores",
-          url: "#"
-        },
-        {
-          title: "",
-          url: "#"
-        }
-      ],
-    },
-    {
       title: "Gestionar",
       url: "#",
       icon: PieChart,
@@ -222,7 +202,7 @@ data = { navMain: [
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} isAdmin={isAdmin}/>
       </SidebarContent>
       <SidebarFooter>
         <NavUser dataUser={userData} setIsAuthenticated={setIsAuthenticated}  />

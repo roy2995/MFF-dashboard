@@ -22,10 +22,10 @@ import {
   SidebarMenuAction
 } from "@/components/ui/sidebar"
 import { Link } from 'react-router-dom';
-export function NavMain({items,}) {
+export function NavMain({items,isAdmin}) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className={"text-3xl"}>MENÚ</SidebarGroupLabel>
+      <SidebarGroupLabel className={"text-3xl mb-2"}>MENÚ</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

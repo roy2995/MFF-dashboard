@@ -12,6 +12,7 @@ import { LoginForm } from "./Login.jsx"
 import {EmployeProfile} from './EmployeProfile';
 import {AddIncapacity} from "./forms/AddIncapacity";
 import {AddPermiso} from "./forms/AddPermiso";
+import { AddUser } from './forms/AddEmploye';
 import {AddVacaciones} from "./forms/AddVacaciones";
 import React, { useState, useEffect } from 'react';
 import { QueryAusencias } from "./consult/queryAusencias";
@@ -19,6 +20,8 @@ import { QueryPermisos } from "./consult/queryPermisos";
 import { QueryVacations } from "./consult/queryVacations"; 
 import { getUserInfoFromToken } from '@/lib/utils';
 import { useAdmin } from '../contexto/AdminContext';
+import { EditUser } from './forms/EditUser';
+
 import {useApiGateway} from '../lib/useApiGateway';
 import { fetchOneUser } from "@/lib/api_gateway";
 
@@ -105,6 +108,16 @@ function App() {
             <Route
               path="/Administrar/Usuarios"
               element={isAuthenticated ? <EmployeProfile /> : <Navigate to="/login" replace />}
+            />
+
+            <Route
+              path="/Administrar/Usuarios/add"
+              element={isAuthenticated ? <AddUser /> : <Navigate to="/login" replace />}
+            />
+
+            <Route
+              path="/Administrar/Usuarios/edit/:username"
+              element={isAuthenticated ? <EditUser /> : <Navigate to="/login" replace />}
             />
 
             {/* Ruta para agregar incapacidad */}
