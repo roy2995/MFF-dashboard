@@ -57,7 +57,7 @@ data = { navMain: [
       },
       {
         title: "Proveedores",
-        url: "#"
+        url: "/Administrar/Provaiders"
       },
       {
         title: "",
