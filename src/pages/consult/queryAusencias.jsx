@@ -40,6 +40,7 @@ export const QueryAusencias = () => {
     certified:""
   });
 
+  console.log(userData)
   const [tardanzaForm, setTardanzaForm] = useState({
     tipo:"tardanza",
     status:"pendiente",
@@ -185,7 +186,7 @@ export const QueryAusencias = () => {
       <div className='flex flex-col w-96 xl:w-[600px] mt-14 xl:mt-36 2xl:mt-52 2xl:w-[700px] bg-white  p-6 border border-gray-300 rounded-md shadow-md '>
 
         <div className='flex justify-center items-center text-bold text-3xl xl:text-3xl 2xl:text-5xl mt-20'>
-        <h1>{userData.name}</h1>
+        <h1>{userData.nombre}</h1>
         </div>
 
         <div className='flex flex-col justify-center items-center text-bold text-xl'>

@@ -96,6 +96,7 @@ export const fetchOneUser = async (path) => {
      // Filter the return to match the desired structure
      const filteredData = {
         name: data.username,
+        nombre: data.usuarioDetalle.allName,
         id: data.usuarioDetalle.id,
         roleId:  data.usuarioDetalle.usersRoles[0].id,
         cargo: data.usuarioDetalle.cargo.cargo,
