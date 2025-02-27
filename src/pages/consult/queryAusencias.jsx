@@ -109,8 +109,8 @@ export const QueryAusencias = () => {
       
      if(!llegoTarde){
       if(!isDisabled){
-        const disableUntil = Date.now() + 60000; //1min
-        //const disableUntil = Date.now() + 43200000; // 12 hrs en milisegundos 
+        //const disableUntil = Date.now() + 60000; //1min
+        const disableUntil = Date.now() + 43200000; // 12 hrs en milisegundos 
         localStorage.setItem("buttonDisabledUntil", disableUntil.toString());
         const idUser = userData.id;
         let d  = new Date();
@@ -137,8 +137,8 @@ export const QueryAusencias = () => {
       }
      }else{
       console.log("llego tarde.. almacenar en la tabla la tardanza");
-        const disableUntil = Date.now() + 60000; //1min
-        //const disableUntil = Date.now() + 43200000; // 12 hrs en milisegundos 
+        //const disableUntil = Date.now() + 60000; //1min
+        const disableUntil = Date.now() + 43200000; // 12 hrs en milisegundos 
         localStorage.setItem("buttonDisabledUntil", disableUntil.toString());
         const idUser = userData.id;
         let d  = new Date();
@@ -154,7 +154,7 @@ export const QueryAusencias = () => {
         setTimeout(() => {
           setIsDisabled(false);
           localStorage.removeItem("buttonDisabledUntil");
-        }, 60000); //durante un minuto no podre volver a presionar el boton.
+        }, 43200000); //durante un minuto no podre volver a presionar el boton.
      }
 
    
