@@ -1,5 +1,5 @@
 
-const api_url = 'http://localhost:8080';
+const api_url = 'http://192.168.68.109:8080';
 
 /*
 export async function signIn(path, username, password) {
@@ -962,3 +962,153 @@ export const createUser = async (userData) => {
     return await response.json();
   };
 
+//-----------------------------------------------------------Proveedores-------------------------------------------------------------------//
+
+export async function getProveedores() {
+    try {
+      const token = localStorage.getItem("token");
+      
+      const response = await fetch(`${api_url}/api/proveedores/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los proveedores');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error en getProveedores:", error);
+      return [];
+    }
+  }
+
+  export async function getProveedorActividades() {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${api_url}/api/v1/proveedoractividades/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener las actividades');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error en getProveedorActividades:", error);
+      return [];
+    }
+  }
+  
+  export async function getPaises() {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${api_url}/api/v1/paises/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los paises');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error en getPaises:", error);
+      return [];
+    }
+  }
+
+  export async function createProveedor(proveedorData) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${api_url}/api/proveedores/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(proveedorData)
+      });
+      if (!response.ok) {
+        throw new Error('Error al crear el proveedor');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error en createProveedor:", error);
+      throw error;
+    }
+  }
+
+  export async function updateProveedor(id, proveedorData) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${api_url}/api/proveedores/update`, {
+        method: "PUT", // También puede ser PATCH según lo requiera tu API
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(proveedorData)
+      });
+      if (!response.ok) {
+        throw new Error("Error al actualizar el proveedor");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error en updateProveedor:", error);
+      throw error;
+    }
+  }
+
+  export async function fetchProveedorByName(name) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${api_url}/api/proveedores/nombre/${name}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error("Error al obtener el proveedor");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error en fetchProveedorByName:", error);
+      throw error;
+    }
+  }
+
+  export async function deleteProveedor(name) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${api_url}/api/proveedores/delete/${name}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error("Error al eliminar el proveedor");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error en deleteProveedor:", error);
+      throw error;
+    }
+  }
+  

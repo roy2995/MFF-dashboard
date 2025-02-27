@@ -53,7 +53,7 @@ data = {
       },
       {
         title: "Proveedores",
-        url: "#"
+        url: "/Administrar/Provaiders"
       },
       {
         title: "",

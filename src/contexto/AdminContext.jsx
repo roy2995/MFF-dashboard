@@ -5,7 +5,7 @@ import {useApiGateway} from '../lib/useApiGateway';
 
 // Create the context
 const AdminContext = createContext();
-const api_url = 'http://localhost:8080';
+const api_url = 'http://192.168.68.109:8080';
 // Create the provider component
 export const AdminProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false); // Initial state

@@ -21,7 +21,9 @@ import { QueryVacations } from "./consult/queryVacations";
 import { getUserInfoFromToken } from '@/lib/utils';
 import { useAdmin } from '../contexto/AdminContext';
 import { EditUser } from './forms/EditUser';
-
+import { EditProveedor } from './forms/EditProvider';
+import { AddProveedor } from './forms/AddProvider';
+import  ProvidersPage  from './providers.jsx';
 import {useApiGateway} from '../lib/useApiGateway';
 import { fetchOneUser } from "@/lib/api_gateway";
 
@@ -115,6 +117,23 @@ function App() {
             <Route
               path="/Administrar/Usuarios/edit/:username"
               element={isAuthenticated ? <EditUser /> : <Navigate to="/login" replace />}
+            />
+
+            {/* Rutas para proveedores */}
+
+            <Route
+              path="/Administrar/Provaiders"
+              element={isAuthenticated ? <ProvidersPage /> : <Navigate to="/login" replace />}
+            />
+
+            <Route
+              path="/Administrar/Provaiders/add"
+              element={isAuthenticated ? <AddProveedor /> : <Navigate to="/login" replace />}
+            />
+
+            <Route
+              path="/Administrar/Provaiders/edit"
+              element={isAuthenticated ? <EditProveedor /> : <Navigate to="/login" replace />}
             />
 
             {/* Ruta para agregar incapacidad */}
