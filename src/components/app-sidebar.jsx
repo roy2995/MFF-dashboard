@@ -103,17 +103,17 @@ data = {
       },
     ],
   },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings2,
-    items: [
-      {
-        title: "",
-        url: "#",
-      }
-    ],
-  },
+  // {
+  //   title: "Settings",
+  //   url: "#",
+  //   icon: Settings2,
+  //   items: [
+  //     {
+  //       title: "",
+  //       url: "#",
+  //     }
+  //   ],
+  // },
 ]}
 }else{
   data = { 
@@ -161,17 +161,17 @@ data = {
         },
       ],
     },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "",
-          url: "#",
-        }
-      ],
-    },
+    // {
+    //   title: "Settings",
+    //   url: "#",
+    //   icon: Settings2,
+    //   items: [
+    //     {
+    //       title: "",
+    //       url: "#",
+    //     }
+    //   ],
+    // },
   ]}
 }
 

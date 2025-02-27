@@ -24,14 +24,14 @@ const Header = ({notificationCount=1}) => {
       <div className="flex items-center gap-2">
         <SidebarTrigger />
         <Separator orientation="vertical" className="h-4" />
-        <p className="text-lg font-bold">{thisPage}</p>
+        <p className="text-lg font-bold"></p>
       </div>
       <div className="flex items-center gap-4">
-        <Calendar size={24} className="text-black" />
+        {/* <Calendar size={24} className="text-black" /> */}
        
-        <Separator orientation="vertical" className="h-4" />
+        {/*<Separator orientation="vertical" className="h-4" />*/}
         
-        <Settings size={24} className="text-black" />
+        {/* <Settings size={24} className="text-black" /> */}
       </div>
     </div>
 

@@ -63,7 +63,7 @@ const [permisoForm, setPermisoForm] = useState({
       });
 
     
-      navigate('/');
+      navigate('/Gestionar/Permisos/Consultar');
 
       
     } catch (error) {

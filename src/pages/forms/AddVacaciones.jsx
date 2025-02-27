@@ -57,7 +57,7 @@ export const AddVacaciones = () => {
        });
  
      
-       navigate('/');
+       navigate('/Gestionar/Vacaciones/Consultar');
  
        
      } catch (error) {

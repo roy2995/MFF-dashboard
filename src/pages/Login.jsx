@@ -17,7 +17,7 @@ export function LoginForm({ setIsAuthenticated }) {
         try {
 
         const data = await signIn('login', username, password);
-
+console.log(data)
         if(data){
             setIsAuthenticated(true);
             navigate('/home');

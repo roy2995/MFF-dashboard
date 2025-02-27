@@ -1,5 +1,5 @@
 
-const api_url = 'http://192.168.68.109:8080';
+const api_url = 'http://localhost:8080';
 
 /*
 export async function signIn(path, username, password) {
